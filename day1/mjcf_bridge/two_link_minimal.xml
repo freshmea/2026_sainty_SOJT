@@ -1,0 +1,14 @@
+<mujoco model="classroom_two_link">
+  <default><joint type="hinge" axis="0 0 1"/></default>
+  <worldbody>
+    <body name="upper">
+      <joint name="shoulder"/>
+      <geom type="capsule" fromto="0 0 0 .12 0 0" size=".01"/>
+      <body name="forearm" pos=".12 0 0">
+        <joint name="wrist"/>
+        <geom type="capsule" fromto="0 0 0 .12 0 0" size=".01"/>
+        <site name="tip" pos=".12 0 0" size=".01"/>
+      </body>
+    </body>
+  </worldbody>
+</mujoco>

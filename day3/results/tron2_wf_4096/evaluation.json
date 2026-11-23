@@ -1,0 +1,85 @@
+{
+  "variant": "WF_TRON2A",
+  "wheel_actuators": 2,
+  "obs_dim": 24,
+  "dt": 0.001,
+  "zero": [
+    {
+      "seed": 101,
+      "goal_m_s": 0.1,
+      "steps": 89,
+      "fall": true,
+      "return": 48.944520164947285,
+      "vx_rmse_m_s": 0.33946954326548445
+    },
+    {
+      "seed": 102,
+      "goal_m_s": 0.1,
+      "steps": 89,
+      "fall": true,
+      "return": 48.944520164947285,
+      "vx_rmse_m_s": 0.33946954326548445
+    },
+    {
+      "seed": 103,
+      "goal_m_s": 0.2,
+      "steps": 89,
+      "fall": true,
+      "return": 43.759461868683815,
+      "vx_rmse_m_s": 0.3186131404373508
+    }
+  ],
+  "before": [
+    {
+      "seed": 101,
+      "goal_m_s": 0.1,
+      "steps": 91,
+      "fall": true,
+      "return": 50.006719405887935,
+      "vx_rmse_m_s": 0.3421451838801654
+    },
+    {
+      "seed": 102,
+      "goal_m_s": 0.1,
+      "steps": 91,
+      "fall": true,
+      "return": 50.006719405887935,
+      "vx_rmse_m_s": 0.3421451838801654
+    },
+    {
+      "seed": 103,
+      "goal_m_s": 0.2,
+      "steps": 91,
+      "fall": true,
+      "return": 44.66319740941313,
+      "vx_rmse_m_s": 0.32074521575937004
+    }
+  ],
+  "after": [
+    {
+      "seed": 101,
+      "goal_m_s": 0.1,
+      "steps": 89,
+      "fall": true,
+      "return": 45.869455671449,
+      "vx_rmse_m_s": 0.3706830374712782
+    },
+    {
+      "seed": 102,
+      "goal_m_s": 0.1,
+      "steps": 89,
+      "fall": true,
+      "return": 45.869455671449,
+      "vx_rmse_m_s": 0.3706830374712782
+    },
+    {
+      "seed": 103,
+      "goal_m_s": 0.2,
+      "steps": 89,
+      "fall": true,
+      "return": 41.580101368700255,
+      "vx_rmse_m_s": 0.3453587814099091
+    }
+  ],
+  "actual_steps": 4096
+}

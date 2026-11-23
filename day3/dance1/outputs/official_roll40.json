@@ -1,0 +1,9 @@
+{
+  "mode": "official",
+  "roll_deg": 40.0,
+  "frames_reached": 15,
+  "planned": 299,
+  "elapsed_s": 0.3,
+  "completed": false,
+  "joint_rmse_rad": 0.38006627050785247
+}

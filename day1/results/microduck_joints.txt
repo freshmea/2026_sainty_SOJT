@@ -1,0 +1,23 @@
+nq=21 nv=20 nu=14 dt=0.002
+STAND root xyz + wxyz: [0.   0.   0.12 1.   0.   0.   0.  ]
+ctrl  actuator -> joint             qpos qvel   angle(rad) target(rad)
+0 left_hip_yaw -> left_hip_yaw 7 6 0.0 0.0
+1 left_hip_roll -> left_hip_roll 8 7 -0.087266 -0.087266
+2 left_hip_pitch -> left_hip_pitch 9 8 -0.457924 -0.457924
+3 left_knee -> left_knee 10 9 -0.00494 -0.00494
+4 left_ankle -> left_ankle 11 10 0.452984 0.452984
+5 neck_pitch -> neck_pitch 12 11 0.349066 0.349066
+6 head_pitch -> head_pitch 13 12 0.349066 0.349066
+7 head_yaw -> head_yaw 14 13 0.0 0.0
+8 head_roll -> head_roll 15 14 0.0 0.0
+9 right_hip_yaw -> right_hip_yaw 16 15 0.0 0.0
+10 right_hip_roll -> right_hip_roll 17 16 0.087266 0.087266
+11 right_hip_pitch -> right_hip_pitch 18 17 0.457924 0.457924
+12 right_knee -> right_knee 19 18 0.00494 0.00494
+13 right_ankle -> right_ankle 20 19 -0.452984 -0.452984
+sensor orientation address 0 width 4
+sensor angular-velocity address 4 width 3
+sensor imu_ang_vel address 7 width 3
+sensor imu_lin_vel address 10 width 3
+sensor imu_accel address 13 width 3
+sensor root_angmom address 16 width 3

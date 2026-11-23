@@ -1,0 +1,491 @@
+{
+  "status": "PASS",
+  "scope": "actual_PPO_train_and_heldout_eval",
+  "training_seed": 11,
+  "requested_steps": 65536,
+  "actual_steps": 65536,
+  "elapsed_training_s": 98.38093763400002,
+  "device": "cpu",
+  "torch_threads": 1,
+  "contract": {
+    "env": "InvertedPendulum-v5",
+    "observation_order": [
+      "cart_m",
+      "pole_rad",
+      "cart_m_s",
+      "pole_rad_s"
+    ],
+    "observation_shape": [
+      4
+    ],
+    "action_shape": [
+      1
+    ],
+    "action_low": [
+      -3.0
+    ],
+    "action_high": [
+      3.0
+    ],
+    "nq": 2,
+    "nv": 2,
+    "nu": 1,
+    "physics_dt": 0.02,
+    "frame_skip": 2,
+    "control_dt": 0.04,
+    "episode_limit": 1000,
+    "seeded_reset_equal": true,
+    "environment_class": "InvertedPendulumEnv"
+  },
+  "versions": {
+    "python": "3.10.12",
+    "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+    "gymnasium": "1.2.0",
+    "mujoco": "3.3.7",
+    "stable_baselines3": "2.7.0",
+    "torch": "2.5.1+cpu",
+    "numpy": "1.26.4"
+  },
+  "baseline_zero": {
+    "mean_return": 23.95,
+    "mean_steps": 24.95,
+    "episodes": [
+      {
+        "reset_seed": 9000,
+        "return": 22.0,
+        "steps": 23,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9001,
+        "return": 19.0,
+        "steps": 20,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9002,
+        "return": 29.0,
+        "steps": 30,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9003,
+        "return": 22.0,
+        "steps": 23,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9004,
+        "return": 22.0,
+        "steps": 23,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9005,
+        "return": 22.0,
+        "steps": 23,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9006,
+        "return": 25.0,
+        "steps": 26,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9007,
+        "return": 24.0,
+        "steps": 25,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9008,
+        "return": 26.0,
+        "steps": 27,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9009,
+        "return": 22.0,
+        "steps": 23,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9010,
+        "return": 25.0,
+        "steps": 26,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9011,
+        "return": 23.0,
+        "steps": 24,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9012,
+        "return": 20.0,
+        "steps": 21,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9013,
+        "return": 19.0,
+        "steps": 20,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9014,
+        "return": 29.0,
+        "steps": 30,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9015,
+        "return": 25.0,
+        "steps": 26,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9016,
+        "return": 32.0,
+        "steps": 33,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9017,
+        "return": 26.0,
+        "steps": 27,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9018,
+        "return": 20.0,
+        "steps": 21,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9019,
+        "return": 27.0,
+        "steps": 28,
+        "terminated": true,
+        "truncated": false
+      }
+    ]
+  },
+  "untrained_policy": {
+    "mean_return": 23.9,
+    "mean_steps": 24.9,
+    "episodes": [
+      {
+        "reset_seed": 9000,
+        "return": 22.0,
+        "steps": 23,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9001,
+        "return": 19.0,
+        "steps": 20,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9002,
+        "return": 29.0,
+        "steps": 30,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9003,
+        "return": 22.0,
+        "steps": 23,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9004,
+        "return": 22.0,
+        "steps": 23,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9005,
+        "return": 22.0,
+        "steps": 23,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9006,
+        "return": 25.0,
+        "steps": 26,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9007,
+        "return": 24.0,
+        "steps": 25,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9008,
+        "return": 26.0,
+        "steps": 27,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9009,
+        "return": 22.0,
+        "steps": 23,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9010,
+        "return": 25.0,
+        "steps": 26,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9011,
+        "return": 23.0,
+        "steps": 24,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9012,
+        "return": 20.0,
+        "steps": 21,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9013,
+        "return": 19.0,
+        "steps": 20,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9014,
+        "return": 28.0,
+        "steps": 29,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9015,
+        "return": 25.0,
+        "steps": 26,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9016,
+        "return": 32.0,
+        "steps": 33,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9017,
+        "return": 26.0,
+        "steps": 27,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9018,
+        "return": 20.0,
+        "steps": 21,
+        "terminated": true,
+        "truncated": false
+      },
+      {
+        "reset_seed": 9019,
+        "return": 27.0,
+        "steps": 28,
+        "terminated": true,
+        "truncated": false
+      }
+    ]
+  },
+  "trained_policy": {
+    "mean_return": 1000.0,
+    "mean_steps": 1000.0,
+    "episodes": [
+      {
+        "reset_seed": 9000,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9001,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9002,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9003,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9004,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9005,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9006,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9007,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9008,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9009,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9010,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9011,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9012,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9013,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9014,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9015,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9016,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9017,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9018,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      },
+      {
+        "reset_seed": 9019,
+        "return": 1000.0,
+        "steps": 1000,
+        "terminated": false,
+        "truncated": true
+      }
+    ]
+  },
+  "parameter_change_l2": 23.84894371032715,
+  "save_reload_eval_exact": true,
+  "greater_than_twice_zero_baseline": true,
+  "limits": "Only MuJoCo inverted pendulum. No Microduck/Sapiens locomotion training or hardware validation."
+}

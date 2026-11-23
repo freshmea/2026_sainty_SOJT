@@ -1,0 +1,11 @@
+
+Files:             telemetry_0.db3
+Bag size:          84.8 KiB
+Storage id:        sqlite3
+Duration:          1.248325617s
+Start:             Nov 22 2026 21:26:57.188925817 (1795350417.188925817)
+End:               Nov 22 2026 21:26:58.437251434 (1795350418.437251434)
+Messages:          120
+Topic information: Topic: /tron2/imu | Type: sensor_msgs/msg/Imu | Count: 60 | Serialization Format: cdr
+                   Topic: /tron2/joint_states | Type: sensor_msgs/msg/JointState | Count: 60 | Serialization Format: cdr
+

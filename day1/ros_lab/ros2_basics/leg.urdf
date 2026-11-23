@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<robot name="classroom_leg">
+  <link name="thigh_link"/>
+  <link name="shin_link"/>
+  <link name="foot_link"/>
+  <joint name="knee_joint" type="revolute">
+    <parent link="thigh_link"/><child link="shin_link"/>
+    <origin xyz="0 0 -0.40"/><axis xyz="0 1 0"/>
+    <limit lower="-1.0" upper="1.0" effort="10" velocity="2.0"/>
+  </joint>
+  <joint name="ankle_mount" type="fixed">
+    <parent link="shin_link"/><child link="foot_link"/>
+    <origin xyz="0 0 -0.35"/>
+  </joint>
+  <ros2_control name="ClassroomMock" type="system">
+    <hardware><plugin>mock_components/GenericSystem</plugin></hardware>
+    <joint name="knee_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+    </joint>
+  </ros2_control>
+</robot>

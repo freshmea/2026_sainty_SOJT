@@ -1,0 +1,7 @@
+ROBOTIS-GIT/ai_sapiens 0f1ca21e657c27aacd8a84d9ad3f1c7284c1aa03
+2e6cac6ba6d5ea5702cee3f47617618b0fb8951783ebcc323b948ccf1c4eb98b  policy.onnx  https://raw.githubusercontent.com/ROBOTIS-GIT/ai_sapiens/0f1ca21e657c27aacd8a84d9ad3f1c7284c1aa03/ai_sapiens_sim2real/assets/k1/mimic/dance1/exported/policy.onnx
+5129fbc1d657d9529eb3fb7beedcf173f05e20839d8b34bf6ce13eef12c2f493  dance1.csv  https://raw.githubusercontent.com/ROBOTIS-GIT/ai_sapiens/0f1ca21e657c27aacd8a84d9ad3f1c7284c1aa03/ai_sapiens_sim2real/assets/k1/mimic/dance1/params/dance1.csv
+1e74ce5f92d3776cb23145dbc8db5c43911754e725cea22cb96c43a19f8668d0  sim2real.yaml  https://raw.githubusercontent.com/ROBOTIS-GIT/ai_sapiens/0f1ca21e657c27aacd8a84d9ad3f1c7284c1aa03/ai_sapiens_sim2real/assets/k1/mimic/dance1/params/sim2real.yaml
+28aa1300b74dd96eaf2044147d72984a0ace566d75dd72e131ee05240e787227  k1_config.yaml  https://raw.githubusercontent.com/ROBOTIS-GIT/ai_sapiens/0f1ca21e657c27aacd8a84d9ad3f1c7284c1aa03/ai_sapiens_sim2real/config/k1_config.yaml
+c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4  LICENSE  https://raw.githubusercontent.com/ROBOTIS-GIT/ai_sapiens/0f1ca21e657c27aacd8a84d9ad3f1c7284c1aa03/LICENSE
+dance1.json combines sim2real.yaml with robot_joint_order and fps from k1_config.yaml for the two course Python environments.

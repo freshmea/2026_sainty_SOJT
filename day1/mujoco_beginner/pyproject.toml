@@ -1,0 +1,15 @@
+[project]
+name = "sainty-mujoco-beginner"
+version = "0.1.0"
+description = "WSL2 MuJoCo beginner exercises for Sainty"
+requires-python = ">=3.10,<3.11"
+dependencies = [
+    "mujoco==3.3.7",
+    "numpy==1.26.4",
+    "matplotlib==3.9.4",
+    "pillow==11.3.0",
+    "gymnasium==1.2.0",
+]
+
+[tool.uv]
+package = false

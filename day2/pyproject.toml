@@ -1,0 +1,14 @@
+[project]
+name = "sainty-pd-control"
+version = "0.1.0"
+requires-python = ">=3.10,<3.11"
+dependencies = [
+    "gymnasium[mujoco]==1.2.0",
+    "mujoco==3.3.7",
+    "numpy==1.26.4",
+    "matplotlib==3.9.4",
+]
+
+[tool.uv]
+package = false
+environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]

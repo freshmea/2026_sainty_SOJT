@@ -1,0 +1,17 @@
+[project]
+name = "sainty-tron2-sdk"
+version = "0.1.0"
+requires-python = ">=3.10,<3.11"
+dependencies = ["limxsdk==4.0.2", "numpy==1.26.4", "mujoco==3.3.7", "pyyaml==6.0.2"]
+
+[tool.uv]
+package = false
+environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]
+
+[tool.uv.sources]
+limxsdk = { url = "https://raw.githubusercontent.com/limxdynamics/limxsdk-lowlevel/70ff83c22f5f54a07c2ddf7e32a2c6ffb1d2ebc7/python3/amd64/limxsdk-4.0.2-py3-none-any.whl" }
+
+[[tool.uv.dependency-metadata]]
+name = "limxsdk"
+version = "4.0.2"
+requires-dist = []

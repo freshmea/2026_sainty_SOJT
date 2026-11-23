@@ -1,0 +1,12 @@
+<mujoco model="native">
+  <include file="sizes.xml"/>
+  <custom><numeric name="radius_hint" data="0.09"/></custom>
+  <worldbody>
+    <frame pos="0 0 0.1">
+      <replicate count="2" offset="0.2 0 0">
+        <geom name="small" class="marker"/>
+      </replicate>
+      <geom name="large" class="marker" size="0.06" pos="0 0.2 0"/>
+    </frame>
+  </worldbody>
+</mujoco>

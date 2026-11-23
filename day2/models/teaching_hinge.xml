@@ -1,0 +1,14 @@
+<mujoco model="teaching_hinge_not_TRON2">
+  <compiler angle="radian"/>
+  <option timestep="0.002" gravity="0 0 0" integrator="implicitfast"/>
+  <worldbody>
+    <light pos="0 0 3"/>
+    <body name="arm" pos="0 0 0.5">
+      <joint name="hinge" axis="0 0 1" range="-1 1" damping="0.08"/>
+      <geom type="capsule" fromto="0 0 0 0.4 0 0" size="0.025" mass="0.3" rgba="0.05 0.6 0.6 1"/>
+      <site name="tip" pos="0.4 0 0" size="0.02"/>
+    </body>
+  </worldbody>
+  <actuator><motor name="torque" joint="hinge" ctrllimited="true" ctrlrange="-2 2"/></actuator>
+  <sensor><jointpos name="angle" joint="hinge"/><jointvel name="velocity" joint="hinge"/></sensor>
+</mujoco>

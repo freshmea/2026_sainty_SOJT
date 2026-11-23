@@ -1,0 +1,46 @@
+{
+ "cmd": "docking_seated.py --n 1 --seed 0 --noise 0 --start 450,15,178 --hold 4 --rest limp --doze_pause 0.1 --handover_s 0 --sit_until_still --save ../results/run.pkl --out ../results/showcase_dock.json",
+ "docked": 1,
+ "runs": 1,
+ "runs_touching_button": 0,
+ "results": [
+  {
+   "ok": true,
+   "button_contacts": 0,
+   "err": [
+    -0.11,
+    0.38,
+    -0.2
+   ],
+   "after_turn": [
+    233.5,
+    22.0,
+    7.9
+   ],
+   "after_sit": [
+    168.1,
+    16.3,
+    4.1,
+    61.3
+   ],
+   "con_step": 604,
+   "hood": [
+    -9.36,
+    19.01
+   ],
+   "trunk_z": 52.3,
+   "usb_drops": 0,
+   "seed": 0,
+   "start": [
+    450,
+    15,
+    178
+   ],
+   "noise": [
+    0.0,
+    -0.0,
+    0.0
+   ]
+  }
+ ]
+}

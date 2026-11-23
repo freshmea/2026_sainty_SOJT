@@ -1,0 +1,11 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 50
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    knee_controller:
+      type: forward_command_controller/ForwardCommandController
+knee_controller:
+  ros__parameters:
+    joints: [knee_joint]
+    interface_name: position

@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "model": "educational_hinge",
+  "mujoco_version": "3.3.7",
+  "physics_hz": 500.0,
+  "control_hz": 100.0,
+  "simulated_seconds": 6.0,
+  "steps": 3000,
+  "tracking_rmse_rad_after_1s": 0.02950418368119297,
+  "reset_verified": true,
+  "limits_verified": true,
+  "not_verified": [
+    "robot-specific PD gains",
+    "physical motor dynamics",
+    "SDK bridge"
+  ]
+}

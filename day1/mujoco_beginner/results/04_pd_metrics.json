@@ -1,0 +1,29 @@
+{
+  "zero": {
+    "kp": 0,
+    "kd": 0,
+    "target_deg": 45.0,
+    "final_error_deg": 45.0,
+    "rmse_deg": 45.00000000000001,
+    "saturation_fraction": 0.0,
+    "completed_time_s": 3.999999999999781
+  },
+  "P": {
+    "kp": 4.0,
+    "kd": 0,
+    "target_deg": 45.0,
+    "final_error_deg": 0.033336030819583334,
+    "rmse_deg": 8.857902315665136,
+    "saturation_fraction": 0.0235,
+    "completed_time_s": 3.999999999999781
+  },
+  "PD": {
+    "kp": 4.0,
+    "kd": 0.6,
+    "target_deg": 45.0,
+    "final_error_deg": 1.4630551534732177e-13,
+    "rmse_deg": 7.528701865605796,
+    "saturation_fraction": 0.0065,
+    "completed_time_s": 3.999999999999781
+  }
+}

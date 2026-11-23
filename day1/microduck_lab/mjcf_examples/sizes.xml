@@ -1,0 +1,5 @@
+<mujoco>
+  <default>
+    <default class="marker"><geom type="sphere" size="0.03"/></default>
+  </default>
+</mujoco>

@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<mujoco model="two_sizes" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:property name="radius" value="0.03"/>
+  <xacro:macro name="marker" params="label x r">
+    <geom name="${label}" type="sphere" pos="${x} 0 0" size="${r}"/>
+  </xacro:macro>
+  <worldbody>
+    <xacro:marker label="small" x="0" r="${radius}"/>
+    <xacro:marker label="large" x="0.2" r="${2 * radius}"/>
+  </worldbody>
+</mujoco>

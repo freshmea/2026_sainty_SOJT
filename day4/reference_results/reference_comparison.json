@@ -1,0 +1,12 @@
+{
+  "seated30.json": {
+    "docked": true,
+    "runs": true,
+    "runs_touching_button": true,
+    "results": false
+  },
+  "undock30.json": {
+    "summary": false,
+    "results": false
+  }
+}

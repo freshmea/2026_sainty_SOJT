@@ -1,0 +1,9 @@
+{
+  "mode": "ppo",
+  "roll_deg": 0,
+  "frames_reached": 66,
+  "planned": 299,
+  "elapsed_s": 1.32,
+  "completed": false,
+  "joint_rmse_rad": 0.13465309487506874
+}

@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "decoded_all_frames": 248,
+  "fps": 10.0,
+  "duration_s": 24.8,
+  "size": [
+    480,
+    480
+  ],
+  "gif_total_duration_ms": 24800,
+  "source_trajectory_frames": 1240,
+  "sampling_stride": 5,
+  "render_changes_only": [
+    "shadow map 8192 to 1024",
+    "480 by 480 pixels",
+    "10 fps preserving 24.8 s"
+  ]
+}

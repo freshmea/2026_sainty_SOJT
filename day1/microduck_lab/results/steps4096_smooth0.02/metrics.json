@@ -1,0 +1,26 @@
+{
+  "training_steps": 4096,
+  "training_seed": 7,
+  "evaluation_seeds": [
+    100,
+    109
+  ],
+  "smooth": 0.02,
+  "results": {
+    "zero": {
+      "rmse_rad": 0.25000000001343164,
+      "falls": 10,
+      "mean_return": -48.0000000046205
+    },
+    "target": {
+      "rmse_rad": 0.06614903768097422,
+      "falls": 10,
+      "mean_return": -8.020682370169055
+    },
+    "ppo": {
+      "rmse_rad": 0.10256752840016438,
+      "falls": 10,
+      "mean_return": -12.257832039585505
+    }
+  }
+}
