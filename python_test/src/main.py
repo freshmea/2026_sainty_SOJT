@@ -6,3 +6,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# mv ~/(이전에 작업한 폴더)/* ~/(github 에 연결된 폴더)/
