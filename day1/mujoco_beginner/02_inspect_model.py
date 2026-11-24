@@ -22,5 +22,6 @@ assert data.time == 0
 np.testing.assert_allclose(data.site("tip").xpos, [0.4/np.sqrt(2), 0.4/np.sqrt(2), 0.5])
 mujoco.mj_resetData(model, data)
 mujoco.mj_forward(model, data)
+print(data.joint("hinge").qpos.copy())
 assert data.joint("hinge").qpos[0] == 0
 print("PASS: named access, geometry and reset.")
