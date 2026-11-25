@@ -117,3 +117,7 @@ if __name__ == "__main__":
             train(env, args.steps)
         else:
             infer(env)
+
+# checkpoint 를 여러개 비교해서 best case 를 따로 저장 하는것!
+# loss function 의 값을 학습 step 마다 저장해서 그래프로 저장
+# learning rate 수정해보고, activation 함수 relu 로 수정(다른거... )

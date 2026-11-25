@@ -1,12 +1,17 @@
 """Separate a change of pose from passive motion in a branched pendulum."""
+import argparse
+import json
 from pathlib import Path
 
 import mujoco
 import numpy as np
 
 
+MODEL = Path(__file__).with_name("chaotic_pendulum.xml")
+
+
 def experiment():
-    model = mujoco.MjModel.from_xml_path(str(Path(__file__).with_name("chaotic_pendulum.xml")))
+    model = mujoco.MjModel.from_xml_path(str(MODEL))
     data = mujoco.MjData(model)
     ids = [model.body(str(i)).id for i in (1, 2, 3)]
     parent = model.body("0").id
@@ -34,6 +39,23 @@ def experiment():
             "after_100_steps_rad": data.qpos.tolist(), "seconds": data.time}
 
 
+def show_motion():
+    import mujoco.viewer
+
+    model = mujoco.MjModel.from_xml_path(str(MODEL))
+    data = mujoco.MjData(model)
+    # Release the tilted main bar from rest. Gravity drives all four hinges.
+    data.joint("root").qpos[0] = np.deg2rad(40)
+    mujoco.mj_forward(model, data)
+    model.vis.global_.azimuth = 90
+    model.vis.global_.elevation = 0
+    mujoco.viewer.launch(model, data)
+
+
 if __name__ == "__main__":
-    import json
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--no-viewer", action="store_true", help="run numerical checks only")
+    args = parser.parse_args()
     print(json.dumps(experiment(), indent=2))
+    if not args.no_viewer:
+        show_motion()

@@ -14,3 +14,6 @@ if __name__ == "__main__":
     output.parent.mkdir(exist_ok=True)
     output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(report["status"], output)
+
+# render..
+# reacher_motion -> viewer 로 GUI 로 볼 수 있게 코드 작성 실행.
