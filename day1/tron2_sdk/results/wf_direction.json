@@ -1,0 +1,65 @@
+{
+  "policy": "official WF ONNX",
+  "phase_s": 2,
+  "settling_s": 0.6,
+  "minimum_signed_rate_fraction": 0.5,
+  "phases": [
+    {
+      "phase": "forward",
+      "vx_cmd": 0.4,
+      "yaw_rate_cmd": 0.0,
+      "body_forward_m": 0.605,
+      "yaw_change_deg": -5.99,
+      "steady_rate": 0.38952415252266126,
+      "wheel_turns": [
+        0.936,
+        0.878
+      ],
+      "fallen": false,
+      "passed": true
+    },
+    {
+      "phase": "reverse",
+      "vx_cmd": -0.4,
+      "yaw_rate_cmd": 0.0,
+      "body_forward_m": -0.583,
+      "yaw_change_deg": -2.85,
+      "steady_rate": -0.43492556870356514,
+      "wheel_turns": [
+        -0.839,
+        -0.87
+      ],
+      "fallen": false,
+      "passed": true
+    },
+    {
+      "phase": "left",
+      "vx_cmd": 0.0,
+      "yaw_rate_cmd": 0.8,
+      "body_forward_m": -0.118,
+      "yaw_change_deg": 89.1,
+      "steady_rate": 0.8096781582283236,
+      "wheel_turns": [
+        -0.799,
+        0.304
+      ],
+      "fallen": false,
+      "passed": true
+    },
+    {
+      "phase": "right",
+      "vx_cmd": 0.0,
+      "yaw_rate_cmd": -0.8,
+      "body_forward_m": -0.064,
+      "yaw_change_deg": -102.16,
+      "steady_rate": -0.9240414696417069,
+      "wheel_turns": [
+        0.517,
+        -0.721
+      ],
+      "fallen": false,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

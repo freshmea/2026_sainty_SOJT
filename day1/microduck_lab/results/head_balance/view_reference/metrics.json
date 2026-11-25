@@ -1,0 +1,30 @@
+{
+  "policy": "alpha_walking.onnx",
+  "sha256": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c",
+  "horizon_s": 10.0,
+  "targets_deg": [
+    0,
+    20,
+    -25,
+    30,
+    -15
+  ],
+  "fall_deg": 60,
+  "pass_rmse_deg": 10,
+  "upright_rate": 1.0,
+  "rmse_deg": 7.955709142754256,
+  "joint_pass_rate": 1.0,
+  "trials": [
+    {
+      "seed": 100,
+      "initial_pitch_deg": -2.125984469375218,
+      "upright": true,
+      "seconds": 10.0,
+      "rmse_deg": 7.955709142754256,
+      "samples": 500,
+      "max_tilt_deg": 2.1989696848742613,
+      "max_drift_m": 0.006543532767935667,
+      "passed": true
+    }
+  ]
+}

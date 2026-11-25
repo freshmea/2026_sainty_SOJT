@@ -1,0 +1,103 @@
+{
+  "training_steps": 4096,
+  "before": [
+    {
+      "command_m_s": 0.0,
+      "seconds": 8.0,
+      "fallen": false,
+      "forward_m": -0.17319390828017558,
+      "lateral_m": 0.02960593149270709,
+      "wheel_turns": [
+        -0.26816867065170497,
+        -0.31389261803198476
+      ],
+      "wheel_ground_fraction": [
+        0.995,
+        1.0
+      ],
+      "speed_rmse": 0.03731541810544826
+    },
+    {
+      "command_m_s": 0.3,
+      "seconds": 8.0,
+      "fallen": false,
+      "forward_m": 1.9940364905199783,
+      "lateral_m": -0.3186587410665757,
+      "wheel_turns": [
+        3.2934996833638195,
+        3.10847755096213
+      ],
+      "wheel_ground_fraction": [
+        0.9925,
+        1.0
+      ],
+      "speed_rmse": 0.08158003229380881
+    },
+    {
+      "command_m_s": 0.5,
+      "seconds": 8.0,
+      "fallen": false,
+      "forward_m": 3.3377211574043284,
+      "lateral_m": -0.6621264349206931,
+      "wheel_turns": [
+        5.5403658226097185,
+        5.287768782072447
+      ],
+      "wheel_ground_fraction": [
+        0.9975,
+        1.0
+      ],
+      "speed_rmse": 0.12959234622315818
+    }
+  ],
+  "after": [
+    {
+      "command_m_s": 0.0,
+      "seconds": 8.0,
+      "fallen": false,
+      "forward_m": -0.13788976976212095,
+      "lateral_m": 0.02698311189185712,
+      "wheel_turns": [
+        -0.2322898179378231,
+        -0.23905395910156782
+      ],
+      "wheel_ground_fraction": [
+        0.9925,
+        1.0
+      ],
+      "speed_rmse": 0.03517228897118886
+    },
+    {
+      "command_m_s": 0.3,
+      "seconds": 8.0,
+      "fallen": false,
+      "forward_m": 2.1057545266014634,
+      "lateral_m": -0.27542147194883587,
+      "wheel_turns": [
+        3.4426620964699257,
+        3.2853425903143014
+      ],
+      "wheel_ground_fraction": [
+        0.9925,
+        1.0
+      ],
+      "speed_rmse": 0.07835413979963003
+    },
+    {
+      "command_m_s": 0.5,
+      "seconds": 8.0,
+      "fallen": false,
+      "forward_m": 3.5107522243990674,
+      "lateral_m": -0.588152174045757,
+      "wheel_turns": [
+        5.768143941852716,
+        5.548590651331865
+      ],
+      "wheel_ground_fraction": [
+        0.995,
+        1.0
+      ],
+      "speed_rmse": 0.12322878409484445
+    }
+  ]
+}

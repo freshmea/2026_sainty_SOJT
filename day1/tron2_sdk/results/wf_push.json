@@ -1,0 +1,43 @@
+{
+  "policy": "official WF ONNX",
+  "speed_m_s": 0,
+  "axis_world": "y",
+  "push_start_s": 2.0,
+  "pulse_s": 0.2,
+  "horizon_s": 8.0,
+  "fall_rule": "base upright cosine < 0.65 or base z < 0.40 m",
+  "trials": [
+    {
+      "force_N": 0.0,
+      "delivered_impulse_Ns": 0.0,
+      "fallen": false,
+      "end_s": 8.0,
+      "peak_tilt_deg": 3.08,
+      "min_base_height_m": 0.715
+    },
+    {
+      "force_N": 50,
+      "delivered_impulse_Ns": 10.0,
+      "fallen": false,
+      "end_s": 8.0,
+      "peak_tilt_deg": 3.08,
+      "min_base_height_m": 0.715
+    },
+    {
+      "force_N": 150,
+      "delivered_impulse_Ns": 30.0,
+      "fallen": false,
+      "end_s": 8.0,
+      "peak_tilt_deg": 4.42,
+      "min_base_height_m": 0.715
+    },
+    {
+      "force_N": 400,
+      "delivered_impulse_Ns": 80.0,
+      "fallen": true,
+      "end_s": 2.58,
+      "peak_tilt_deg": 63.34,
+      "min_base_height_m": 0.5022
+    }
+  ]
+}
