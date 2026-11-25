@@ -1,0 +1,33 @@
+{
+  "training_seed": 7,
+  "requested_steps": 4096,
+  "training_steps": 4096,
+  "evaluation_seeds": [
+    11,
+    22,
+    33,
+    44,
+    55
+  ],
+  "zero": {
+    "mean_return": -131.65206027743827,
+    "rmse_rad": 0.8113324234783159,
+    "final_abs_error_rad": 0.8096630814789106,
+    "failures": 0,
+    "steps": 1000
+  },
+  "before": {
+    "mean_return": -159.88159842127655,
+    "rmse_rad": 0.8940853453082783,
+    "final_abs_error_rad": 0.9827217464639117,
+    "failures": 0,
+    "steps": 1000
+  },
+  "sb3": {
+    "mean_return": -5.717007208905483,
+    "rmse_rad": 0.16083604086263428,
+    "final_abs_error_rad": 0.0044703026606013555,
+    "failures": 0,
+    "steps": 1000
+  }
+}

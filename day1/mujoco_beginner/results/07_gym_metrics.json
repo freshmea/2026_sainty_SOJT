@@ -1,0 +1,76 @@
+{
+  "zero": [
+    {
+      "seed": 11,
+      "return": -147.81135898463717,
+      "final_error_rad": 0.8596841250850131,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 22,
+      "return": -131.91063135508895,
+      "final_error_rad": 0.8121287809057405,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 33,
+      "return": -126.93652714452223,
+      "final_error_rad": 0.7966697155801823,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 44,
+      "return": -148.22461793285757,
+      "final_error_rad": 0.8608850618196895,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 55,
+      "return": -103.37716597008536,
+      "final_error_rad": 0.7189477240039279,
+      "terminated": false,
+      "truncated": true
+    }
+  ],
+  "PD": [
+    {
+      "seed": 11,
+      "return": -4.789586111047133,
+      "final_error_rad": -2.1855695031547384e-08,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 22,
+      "return": -4.228432657171506,
+      "final_error_rad": -2.1855695031547384e-08,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 33,
+      "return": -4.053803696180907,
+      "final_error_rad": -2.1855695031547384e-08,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 44,
+      "return": -4.804225327823525,
+      "final_error_rad": -2.1855695031547384e-08,
+      "terminated": false,
+      "truncated": true
+    },
+    {
+      "seed": 55,
+      "return": -3.2351759134652167,
+      "final_error_rad": -2.1855695031547384e-08,
+      "terminated": false,
+      "truncated": true
+    }
+  ]
+}

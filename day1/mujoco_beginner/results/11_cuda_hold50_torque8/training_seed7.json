@@ -1,0 +1,65 @@
+{
+  "seed": 7,
+  "torch": "2.5.1+cu124",
+  "cuda_runtime": "12.4",
+  "gpu": "NVIDIA GeForce RTX 3060 Laptop GPU",
+  "policy_device": "cuda:0",
+  "adam_device": "cuda:0",
+  "selected_step": 65536,
+  "history": [
+    {
+      "steps": 8192,
+      "reached_90": 0,
+      "min_reach_pct": 0.0
+    },
+    {
+      "steps": 16384,
+      "reached_90": 0,
+      "min_reach_pct": 0.0
+    },
+    {
+      "steps": 24576,
+      "reached_90": 0,
+      "min_reach_pct": -9.893994799550265
+    },
+    {
+      "steps": 32768,
+      "reached_90": 6,
+      "min_reach_pct": -155.5183645509707
+    },
+    {
+      "steps": 40960,
+      "reached_90": 6,
+      "min_reach_pct": 82.09269905945995
+    },
+    {
+      "steps": 49152,
+      "reached_90": 9,
+      "min_reach_pct": 89.0634840280449
+    },
+    {
+      "steps": 57344,
+      "reached_90": 9,
+      "min_reach_pct": 88.69402265387153
+    },
+    {
+      "steps": 65536,
+      "reached_90": 8,
+      "min_reach_pct": 83.35515321033817
+    },
+    {
+      "stage": "refine",
+      "steps": 57344,
+      "reached_90": 9,
+      "min_reach_pct": 88.3685517550138
+    },
+    {
+      "stage": "refine",
+      "steps": 65536,
+      "reached_90": 12,
+      "min_reach_pct": 94.40929978634595
+    }
+  ],
+  "extra_training_steps": 16384,
+  "total_training_steps": 81920
+}

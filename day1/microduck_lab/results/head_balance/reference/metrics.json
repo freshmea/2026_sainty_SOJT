@@ -1,0 +1,129 @@
+{
+  "policy": "alpha_walking.onnx",
+  "sha256": "e36332d383997d51401897734cd3e79cf5038406feddb18b4d57ecfb141daa6c",
+  "horizon_s": 10.0,
+  "targets_deg": [
+    0,
+    20,
+    -25,
+    30,
+    -15
+  ],
+  "fall_deg": 60,
+  "pass_rmse_deg": 10,
+  "upright_rate": 1.0,
+  "rmse_deg": 7.998204999185242,
+  "joint_pass_rate": 1.0,
+  "trials": [
+    {
+      "seed": 100,
+      "initial_pitch_deg": -2.125984469375218,
+      "upright": true,
+      "seconds": 10.0,
+      "rmse_deg": 7.955709142754256,
+      "samples": 500,
+      "max_tilt_deg": 2.1989696848742613,
+      "max_drift_m": 0.006543532767935667,
+      "passed": true
+    },
+    {
+      "seed": 101,
+      "initial_pitch_deg": 0.48691279502738816,
+      "upright": true,
+      "seconds": 10.0,
+      "rmse_deg": 8.063569177872296,
+      "samples": 500,
+      "max_tilt_deg": 1.0375898474220282,
+      "max_drift_m": 0.0015341640095778038,
+      "passed": true
+    },
+    {
+      "seed": 102,
+      "initial_pitch_deg": -2.1109727616774983,
+      "upright": true,
+      "seconds": 10.0,
+      "rmse_deg": 7.956615153673125,
+      "samples": 500,
+      "max_tilt_deg": 2.185550241063967,
+      "max_drift_m": 0.00653321585810737,
+      "passed": true
+    },
+    {
+      "seed": 103,
+      "initial_pitch_deg": 2.874300720436646,
+      "upright": true,
+      "seconds": 10.0,
+      "rmse_deg": 8.049514321343812,
+      "samples": 500,
+      "max_tilt_deg": 2.71730548591272,
+      "max_drift_m": 0.004869558209561561,
+      "passed": true
+    },
+    {
+      "seed": 104,
+      "initial_pitch_deg": 2.7597655811697326,
+      "upright": true,
+      "seconds": 10.0,
+      "rmse_deg": 7.921368324238163,
+      "samples": 500,
+      "max_tilt_deg": 2.6056089791445007,
+      "max_drift_m": 0.004562116818846677,
+      "passed": true
+    },
+    {
+      "seed": 105,
+      "initial_pitch_deg": 2.268596094458955,
+      "upright": true,
+      "seconds": 10.0,
+      "rmse_deg": 8.049122357169885,
+      "samples": 500,
+      "max_tilt_deg": 2.1259814002514696,
+      "max_drift_m": 0.0035373608460024645,
+      "passed": true
+    },
+    {
+      "seed": 106,
+      "initial_pitch_deg": 1.2641023983749564,
+      "upright": true,
+      "seconds": 10.0,
+      "rmse_deg": 7.91211848802156,
+      "samples": 500,
+      "max_tilt_deg": 1.3743024069467389,
+      "max_drift_m": 0.001355680547704795,
+      "passed": true
+    },
+    {
+      "seed": 107,
+      "initial_pitch_deg": -1.521108241983851,
+      "upright": true,
+      "seconds": 10.0,
+      "rmse_deg": 8.056296642405384,
+      "samples": 500,
+      "max_tilt_deg": 1.6545301015414742,
+      "max_drift_m": 0.0053671714123506645,
+      "passed": true
+    },
+    {
+      "seed": 108,
+      "initial_pitch_deg": -2.2168786205959785,
+      "upright": true,
+      "seconds": 10.0,
+      "rmse_deg": 7.956496814916719,
+      "samples": 500,
+      "max_tilt_deg": 2.2802037685707663,
+      "max_drift_m": 0.006711156507358852,
+      "passed": true
+    },
+    {
+      "seed": 109,
+      "initial_pitch_deg": -1.3225017683647928,
+      "upright": true,
+      "seconds": 10.0,
+      "rmse_deg": 8.059041366853862,
+      "samples": 500,
+      "max_tilt_deg": 1.4739523734101718,
+      "max_drift_m": 0.004953994335417672,
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "training_steps": 4096,
+  "training_seed": 7,
+  "device": "cuda",
+  "evaluation_seeds": [
+    100,
+    109
+  ],
+  "smooth": 0.02,
+  "results": {
+    "zero": {
+      "rmse_rad": 0.25000000001343164,
+      "falls": 10,
+      "mean_return": -48.0000000046205
+    },
+    "target": {
+      "rmse_rad": 0.06614903768097422,
+      "falls": 10,
+      "mean_return": -8.020682370169055
+    },
+    "ppo": {
+      "rmse_rad": 0.10397086565370718,
+      "falls": 10,
+      "mean_return": -12.457239342489487
+    }
+  },
+  "checkpoints": {
+    "early": {
+      "step": 128,
+      "rmse_rad": 0.2485570764938847,
+      "falls": 10,
+      "mean_return": -47.50508614009585
+    },
+    "middle": {
+      "step": 2048,
+      "rmse_rad": 0.10538993108436935,
+      "falls": 10,
+      "mean_return": -12.649673384319922
+    },
+    "late": {
+      "step": 4096,
+      "rmse_rad": 0.10397086565370718,
+      "falls": 10,
+      "mean_return": -12.457239342489487
+    }
+  }
+}

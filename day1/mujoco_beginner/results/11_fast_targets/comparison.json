@@ -1,0 +1,81 @@
+{
+  "targets_deg": [
+    45,
+    15,
+    60,
+    -15
+  ],
+  "hold_seconds": 0.1,
+  "torque_limit_nm": 8.0,
+  "training_steps_per_seed": 32768,
+  "train_seeds": [
+    7,
+    17,
+    27
+  ],
+  "tune_seeds": [
+    401,
+    402,
+    403
+  ],
+  "eval_seeds": [
+    11,
+    22,
+    33,
+    44,
+    55
+  ],
+  "tuned_pd": {
+    "kp": 3.0,
+    "kd": 1.7999999999999998,
+    "candidates": 148,
+    "tuning_return": -55.72636725736875
+  },
+  "results": {
+    "pd_previous": {
+      "mean_return": -91.8020956237056,
+      "rmse_deg": 29.30737199869067,
+      "rms_speed_deg_s": 242.4562451148182,
+      "rms_torque_nm": 4.277664592229747,
+      "end_hits": 0,
+      "segments": 200,
+      "failures": 0
+    },
+    "pd_retuned": {
+      "mean_return": -55.73662502526541,
+      "rmse_deg": 29.673104355767144,
+      "rms_speed_deg_s": 53.48899252336429,
+      "rms_torque_nm": 1.3244838416554667,
+      "end_hits": 4,
+      "segments": 200,
+      "failures": 0
+    },
+    "ppo_seed7": {
+      "mean_return": -52.73513478776044,
+      "rmse_deg": 28.954783405570563,
+      "rms_speed_deg_s": 49.90694729573737,
+      "rms_torque_nm": 0.838786572543036,
+      "end_hits": 2,
+      "segments": 200,
+      "failures": 0
+    },
+    "ppo_seed17": {
+      "mean_return": -52.34775458136537,
+      "rmse_deg": 28.422382369138326,
+      "rms_speed_deg_s": 67.77521835776793,
+      "rms_torque_nm": 1.2909637805317413,
+      "end_hits": 0,
+      "segments": 200,
+      "failures": 0
+    },
+    "ppo_seed27": {
+      "mean_return": -55.37642020462674,
+      "rmse_deg": 29.922732603620204,
+      "rms_speed_deg_s": 34.88543692770731,
+      "rms_torque_nm": 0.6554764913010309,
+      "end_hits": 0,
+      "segments": 200,
+      "failures": 0
+    }
+  }
+}

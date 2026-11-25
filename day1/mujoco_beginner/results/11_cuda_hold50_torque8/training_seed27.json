@@ -1,0 +1,101 @@
+{
+  "seed": 27,
+  "torch": "2.5.1+cu124",
+  "cuda_runtime": "12.4",
+  "gpu": "NVIDIA GeForce RTX 3060 Laptop GPU",
+  "policy_device": "cuda:0",
+  "adam_device": "cuda:0",
+  "selected_step": 57344,
+  "history": [
+    {
+      "steps": 8192,
+      "reached_90": 0,
+      "min_reach_pct": 0.0
+    },
+    {
+      "steps": 16384,
+      "reached_90": 3,
+      "min_reach_pct": 52.64096798761578
+    },
+    {
+      "steps": 24576,
+      "reached_90": 6,
+      "min_reach_pct": 67.22011529052206
+    },
+    {
+      "steps": 32768,
+      "reached_90": 6,
+      "min_reach_pct": 87.09660383859193
+    },
+    {
+      "steps": 40960,
+      "reached_90": 7,
+      "min_reach_pct": 88.6717341305648
+    },
+    {
+      "steps": 49152,
+      "reached_90": 9,
+      "min_reach_pct": 85.62345879774635
+    },
+    {
+      "steps": 57344,
+      "reached_90": 7,
+      "min_reach_pct": 80.03751694776365
+    },
+    {
+      "steps": 65536,
+      "reached_90": 9,
+      "min_reach_pct": 78.15030316886953
+    },
+    {
+      "stage": "refine",
+      "steps": 57344,
+      "reached_90": 9,
+      "min_reach_pct": 87.49417536062845
+    },
+    {
+      "stage": "refine",
+      "steps": 65536,
+      "reached_90": 6,
+      "min_reach_pct": 80.59873541913346
+    },
+    {
+      "stage": "refine",
+      "steps": 73728,
+      "reached_90": 6,
+      "min_reach_pct": 75.23550080876306
+    },
+    {
+      "stage": "refine",
+      "steps": 81920,
+      "reached_90": 6,
+      "min_reach_pct": 78.6347381315482
+    },
+    {
+      "stage": "refine",
+      "steps": 90112,
+      "reached_90": 6,
+      "min_reach_pct": 79.36391824976002
+    },
+    {
+      "stage": "refine",
+      "steps": 98304,
+      "reached_90": 6,
+      "min_reach_pct": 72.96603885811413
+    },
+    {
+      "stage": "refine",
+      "steps": 106496,
+      "reached_90": 3,
+      "min_reach_pct": 71.12783972316656
+    },
+    {
+      "stage": "refine",
+      "steps": 114688,
+      "reached_90": 3,
+      "min_reach_pct": 69.69155855061281
+    }
+  ],
+  "extra_training_steps": 65536,
+  "total_training_steps": 131072
+}
