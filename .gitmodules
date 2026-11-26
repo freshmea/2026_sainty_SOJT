@@ -7,3 +7,6 @@
 [submodule "day4/microduck_rl_training"]
 	path = day4/microduck_rl_training
 	url = https://github.com/pollen-robotics/microduck_rl.git
+[submodule "day5/tron2_sdk/upstream/tron2_mujoco_sim"]
+	path = day5/tron2_sdk/upstream/tron2_mujoco_sim
+	url = https://github.com/limxdynamics/tron2_mujoco_sim.git
