@@ -8,10 +8,10 @@ usage() {
   echo "usage: ./panel_control.sh [sim [mujoco|gz] | control | hardware ROBOT_IP [--enable-motion] | operator | check [WF_TRON2A|SF_TRON2A]]" >&2
   exit 2
 }
-args=("mode:=$mode")
-packages=(tron2_description)
+args=()
+packages=()
 backend=mujoco
-entry=("$day/tron2_sdk/live.launch.py")
+entry=()
 source /opt/ros/humble/setup.bash
 case "$mode" in
   check) exec ./ros_lab/run.sh tron2 "${1:-WF_TRON2A}" ;;
@@ -28,6 +28,8 @@ case "$mode" in
     else
       [[ $# == 0 ]] || usage
       packages=(tron2_bringup)
+      entry=(tron2_bringup wheel_angle_demo.launch.py)
+      args=("sdk_root:=$day/tron2_sdk")
     fi
     if [[ $backend == mujoco ]]; then
       if [[ ! -f tron2_sdk/upstream/tron2_mujoco_sim/tron2_sim/core.py ]]; then
@@ -45,7 +47,9 @@ case "$mode" in
       echo 'Set TRON2_SDK_PYTHON to a Python 3.10 interpreter with ROS 2 Humble and the LimX SDK for this CPU.' >&2
       exit 1
     fi
-    args+=("robot_ip:=$1" "sdk_python:=$python")
+    packages=(tron2_bringup)
+    entry=(tron2_bringup sdk_gateway.launch.py)
+    args=("sdk_root:=$day/tron2_sdk" "robot_ip:=$1" "sdk_python:=$python")
     if [[ ${2:-} == --enable-motion ]]; then args+=("motion:=true"); fi ;;
   operator)
     [[ $# == 0 ]] || usage

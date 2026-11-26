@@ -1,0 +1,46 @@
+[
+  {
+    "test": "front",
+    "initial_height": 0.17153463107893324,
+    "min_height": 0.07423848162021127,
+    "max_height": 0.7584878080225843,
+    "final_height": 0.7322055887077454,
+    "seconds": 5.004453840998394,
+    "mean_v": -0.027965855213384596,
+    "recovered": true,
+    "failed": false
+  },
+  {
+    "test": "back",
+    "initial_height": 0.12161582573844801,
+    "min_height": 0.08144486478847435,
+    "max_height": 0.7582709879284271,
+    "final_height": 0.7321780910369107,
+    "seconds": 5.004718354000943,
+    "mean_v": -0.0472231261699985,
+    "recovered": true,
+    "failed": false
+  },
+  {
+    "test": "fast",
+    "initial_height": 0.7524258828811441,
+    "min_height": 0.7191754980338686,
+    "max_height": 0.752695320253451,
+    "final_height": 0.7526928619012665,
+    "seconds": 22.986464273999445,
+    "mean_v": 5.053846290838366,
+    "recovered": false,
+    "failed": false
+  },
+  {
+    "test": "natural",
+    "initial_height": 0.7526941019177327,
+    "min_height": 0.11619308070610382,
+    "max_height": 0.7669455293674972,
+    "final_height": 0.1691935680518225,
+    "seconds": 12.296932207998907,
+    "mean_v": 0.24085235327619725,
+    "recovered": false,
+    "failed": true
+  }
+]

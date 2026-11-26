@@ -19,5 +19,6 @@ setup(
     license='Apache-2.0',
     entry_points={'console_scripts': [
         'joint_panel = tron2_dashboard.joint_panel:main',
+        'velocity_joystick = tron2_dashboard.velocity_joystick:main',
     ]},
 )

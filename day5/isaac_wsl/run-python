@@ -1,0 +1,11 @@
+#!/bin/bash
+set -eu
+root=$(cd "$(dirname "$0")" && pwd)
+if [ -f /usr/lib/wsl/lib/libcuda.so.1 ]; then
+    export LD_LIBRARY_PATH="$root/driver:/usr/lib/wsl/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    export LD_PRELOAD="/usr/lib/wsl/lib/libcuda.so.1:/usr/lib/wsl/lib/libnvidia-ml.so.1${LD_PRELOAD:+:$LD_PRELOAD}"
+fi
+if [ -f "$root/env/.omniverse-eula-accepted" ]; then
+    export OMNI_KIT_ACCEPT_EULA=YES
+fi
+exec "$root/env/bin/python" "$@"

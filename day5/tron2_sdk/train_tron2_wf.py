@@ -6,11 +6,7 @@ from pathlib import Path
 import gymnasium as gym
 import mujoco
 import numpy as np
-import onnx
 import onnxruntime as ort
-import torch
-from stable_baselines3 import PPO
-from torch import nn
 import yaml
 
 ROOT = Path(__file__).resolve().parent
@@ -104,6 +100,11 @@ class WheelDrive(gym.Env):
 
 
 def from_official(env, seed):
+    import onnx
+    import torch
+    from stable_baselines3 import PPO
+    from torch import nn
+
     graph = onnx.load(WEIGHTS / "policy.onnx").graph
     weights = {p.name: onnx.numpy_helper.to_array(p) for p in graph.initializer}
     nodes = list(graph.node)
@@ -155,6 +156,9 @@ def evaluate(agent, env, speed):
 
 
 def main():
+    import torch
+    from stable_baselines3 import PPO
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, required=True, help="new directory")
     parser.add_argument("--steps", type=int, default=4096)

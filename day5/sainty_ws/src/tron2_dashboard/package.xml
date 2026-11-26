@@ -18,5 +18,6 @@
   <exec_depend>rqt_graph</exec_depend>
   <exec_depend>tron2_control</exec_depend>
   <exec_depend>tron2_description</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
   <export><build_type>ament_python</build_type></export>
 </package>

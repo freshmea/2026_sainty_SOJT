@@ -30,6 +30,20 @@ source install/setup.bash
 
 Gazebo 백엔드는 Ubuntu 22.04, ROS 2 Humble, Gazebo Sim Fortress를 사용한다. 이 조합의 시뮬레이터 명령은 `ign gazebo`다. 빌드에는 `libignition-gazebo6-dev`, 실행에는 Fortress의 시스템 플러그인과 `ros-humble-ros-gz-sim`, `ros-humble-xacro`가 필요하다. 기존 MuJoCo SDK 환경을 쓰려면 `~/sainty/day5/tron2_sdk/.venv`, 모델과 공식 시뮬레이터 서브모듈이 필요하다. 새 체크아웃에서 첫 `./panel_control.sh sim mujoco`가 이를 준비한다. 다른 위치에 준비한 경우 `sdk_root:=/절대/경로/tron2_sdk`를 지정한다. 운영 PC만 준비할 때는 `colcon build --packages-up-to tron2_dashboard`로 충분하다.
 
+### WF 정책 주행과 속도 조이스틱
+
+MuJoCo에서 서 있는 WF 모델을 속도로 조종하려면 기존 시뮬레이션을 종료하고 아래 launch를 실행한다. 이 모드는 전후 속도와 회전 속도를 받아 제조사 ONNX 두 개로 균형과 구동을 계산한다. 소스 변경 후에는 위의 패키지 빌드와 소싱을 먼저 수행한다.
+
+```bash
+cd ~/sainty/day5
+git submodule update --init --depth 1 -- tron2_sdk/vendor/tron2_rl_deploy_python
+(cd tron2_sdk && uv sync --locked && uv run --locked python fetch_models.py)
+source sainty_ws/install/setup.bash
+ros2 launch tron2_bringup policy_drive.launch.py
+```
+
+`profile:=reference`는 제조사 WF 예제의 속도 범위를 읽는다. `profile:=experiment`는 시뮬레이션에서 전후 ±5 m/s, 회전 ±4 rad/s까지 명령한다. 시험 범위는 `max_linear:=2.0 max_yaw:=1.5`처럼 바꿀 수 있다. RViz2는 `rviz:=true`로 추가한다. [정책 주행 실습 PDF](../pdf/TRON2_WF_정책주행_조이스틱_실습.pdf) · [속도·낙상 시험 46건](../pdf/tron2_figures/wf_policy_sweep.csv)
+
 ### 터미널 A — 시뮬레이션 브링업
 
 ```bash
@@ -52,7 +66,7 @@ ros2 launch tron2_dashboard dashboard.launch.py target:=simulation
 
 다리는 위치(°), 바퀴는 속도(rad/s)로 조작한다. 오른쪽 열은 실측이다. 시뮬레이션에서는 슬라이더를 움직이면 즉시 적용된다. **명령 해제**는 감쇠를 요청한다. 두 발행 경로 모두 명령이 끊기면 0.25초 만료를 적용한다. 시뮬레이터와 대시보드를 각각 띄웠다면 패널을 닫아도 물리 엔진은 계속 실행된다. RViz와 rqt 창은 각각 `rviz:=false`, `rqt:=false`로 생략할 수 있다.
 
-한 터미널에서 함께 열려면 `cd ~/sainty/day5` 후 `./panel_control.sh sim gz` 또는 `./panel_control.sh sim mujoco`를 사용한다. 예전 바퀴 각도(±180°) 실습은 `./panel_control.sh control`이다.
+한 터미널에서 함께 열려면 `cd ~/sainty/day5` 후 `./panel_control.sh sim gz` 또는 `./panel_control.sh sim mujoco`를 사용한다. 바퀴 각도(±180°) 실습은 `./panel_control.sh control`로 연다. 이 모드는 `tron2_bringup/wheel_angle_demo.launch.py`에서 루프백 MuJoCo와 각도 전용 패널을 실행한다. SDK 폴더의 `sdk_bridge.py`는 ROS와 LimX SDK를 연결하고, `wf_servo.py`는 WF 구동 허용·명령 만료·감쇠를 처리한다.
 
 ### 고정된 실기체 SBC에 연결
 
@@ -155,3 +169,48 @@ uv run --locked tron2_locomotion.py WF_TRON2A --steps 1024 --out "results/wf-$(d
 ```
 
 `SF_TRON2A`도 같은 방법으로 실행한다. 지정한 새 출력 폴더에 `policy.zip`과 `evaluation.json`을 저장한다.
+
+### WF 낙상 복구와 고속 직진의 학습·검증
+
+WSL의 MuJoCo 실습은 별도 가상환경에서 Stable-Baselines3 PPO를 사용한다. ROS 환경을 source한 후 day5에서 실행한다. 출력 경로는 실행마다 새로 정한다.
+
+```bash
+R="$PWD/locomotion/results"
+ros2 launch tron2_bringup locomotion_train.launch.py task:=recovery steps:=16384 out:="$R/recovery_class01"
+ros2 launch tron2_bringup locomotion_train.launch.py task:=high_speed target:=5.0 crouch:=0.35 steps:=24576 out:="$R/speed_class01"
+ros2 launch tron2_bringup policy_drive.launch.py profile:=experiment start_pose:=front \
+  drive_onnx:="$R/wf_high_speed_s73/policy.onnx" recovery_onnx:="$R/wf_recovery_s73/policy.onnx"
+```
+
+[낙상 복구 실습](../pdf/TRON2_WF_낙상복구_PPO_상세교안.pdf)과 [고속 주행 실습](../pdf/TRON2_WF_고속주행_PPO_상세교안.pdf)에 전체 데이터 흐름, 같은 초기 상태에서의 대조군, 성공·실패 판정과 재평가 명령이 있다. 개별 96회 결과는 [시험 CSV](../pdf/tron2_figures/wf_training_trials.csv)에 있다.
+
+LimX의 공식 평지 WF 과제는 [제조사 README](tron2_sdk/vendor/tron2_rl_lab/README.md)에 따라 Isaac Lab과 저장소에 포함된 rsl_rl을 사용한다. WSL 내부에 준비한 isaac_wsl/run-python을 통해 다음처럼 원본 trainer를 launch할 수 있다. num_envs와 iterations는 먼저 경로를 점검하기 위한 값이다.
+
+```bash
+ros2 launch tron2_bringup limx_wf_train.launch.py \
+  num_envs:=4 iterations:=2
+```
+
+기준 과제(reference)는 LimX 원본 WF 설정이다. high_speed와 recovery는 WSL 프로젝트에서 별도로 등록하는 수업용 과제다. 공식 Linux Isaac 환경에서 stage:=play 및 checkpoint:=/경로/model_N.pt를 함께 지정하면 play.py가 actor와 encoder를 한 쌍으로 내보낸다. stage:=train에서 checkpoint를 지정하면 같은 과제의 학습을 재개한다.
+
+이 PC의 WSL2에서 공식 trainer가 4환경 × 24스텝 × 2회 = 192스텝을 수집하고 model_2.pt를 생성했다. WSL과 일반 Linux CUDA 라이브러리를 함께 읽은 첫 실행에서는 PhysX가 CUDA 초기화에 실패했다. isaac_wsl/run-python은 해당 프로세스 안에서 WSL CUDA 드라이버를 우선 로드한다. CPU Vulkan 장치(llvmpipe)만 열거된 환경이므로 headless 학습과 RTX 화면 렌더링 검증을 구분한다.
+
+### WSL2에서 다시 학습한 세 모델의 비교
+
+기본·고속 과제는 각각 24,576스텝, 복구는 16,512스텝 학습했다. WSL2 원본 체크포인트와 짝을 이룬 ONNX는 `locomotion/results/wsl_isaac_{reference,high_speed,recovery}_s73/`에 정리했다. 각 폴더의 `training.json`에 원본 체크포인트의 절대 경로와 가중치 해시가 있다.
+
+공통 MuJoCo 시험에서 기준 제어를 사용하는 수업 모델은 3·5 m/s 직진 12/12회, 정지 낙상 복구 9/12회를 통과했다. 기준 제어만으로도 같은 횟수를 통과했다. 짧게 학습한 Isaac 고속 모델은 같은 직진 조건에서 0/12회, Isaac 복구 모델도 0/12회였다. [WSL2 공식 학습과 MuJoCo 비교 교안](../pdf/TRON2_WF_WSL2_Isaac_공식학습과_MuJoCo_비교.pdf)에 실행 명령·그래프·판정 기준을, [시험 기록 CSV](../pdf/tron2_figures/wf_wsl_engine_comparison.csv)에 192회의 개별 결과를 담았다.
+
+### WF 허리 RGB-D 카메라 실습
+
+MuJoCo 정책 주행 또는 관절 패널 시뮬레이션을 실행하면 시뮬레이터와 별도로 Image View 창이 열리고 `/tron2/color`가 선택된다. 같은 창에서 `/tron2/depth`도 볼 수 있다. ROS launch 옵션 `camera_view:=false`로 창만 끌 수 있다. 기체 탑재 카메라 시점과 ROS 광학 프레임은 두 백엔드에서 일치하도록 정의했다. [조이스틱·카메라 실습 교안](../pdf/TRON2_WF_정책주행_조이스틱_실습.pdf)
+
+```bash
+cd ~/sainty/day5
+source /opt/ros/humble/setup.bash
+source sainty_ws/install/setup.bash
+# 먼저 모델 파일만 검사
+tron2_sdk/.venv/bin/python ros_lab/check_wf_camera.py
+# 시뮬레이션을 실행한 후 별도 터미널에서 영상, 보정 정보, TF까지 검사
+tron2_sdk/.venv/bin/python ros_lab/check_wf_camera.py --live
+```

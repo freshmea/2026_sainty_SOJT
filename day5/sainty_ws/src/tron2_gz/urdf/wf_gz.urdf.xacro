@@ -1,6 +1,19 @@
 <?xml version="1.0"?>
 <robot name="tron2" xmlns:xacro="http://www.ros.org/wiki/xacro">
   <xacro:include filename="$(find tron2_description)/urdf/wf_tron2a.urdf"/>
+  <gazebo reference="d435_Link">
+    <sensor name="wf_rgbd" type="rgbd_camera">
+      <pose>0 0 0 0 -1.5707963267948966 0</pose>
+      <topic>/tron2/wf_rgbd</topic>
+      <always_on>true</always_on>
+      <update_rate>15</update_rate>
+      <camera>
+        <horizontal_fov>1.5177</horizontal_fov>
+        <image><width>320</width><height>240</height><format>R8G8B8</format></image>
+        <clip><near>0.05</near><far>10</far></clip>
+      </camera>
+    </sensor>
+  </gazebo>
   <gazebo>
     <plugin filename="libtron2_gz_control.so" name="tron2_gz::WheelFootSystem"/>
   </gazebo>

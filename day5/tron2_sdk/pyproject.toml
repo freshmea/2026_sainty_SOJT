@@ -5,6 +5,8 @@ requires-python = ">=3.10,<3.11"
 dependencies = [
     "limxsdk==4.0.2",
     "numpy==1.26.4",
+    "gymnasium==1.2.0",
+    "onnxruntime==1.23.2",
     "mujoco==3.3.7",
     "pyyaml==6.0.2",
     "pillow==11.3.0",

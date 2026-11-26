@@ -1,4 +1,16 @@
-# TRON2 시뮬레이션을 ROS 2에 연결하기
+# TRON2의 관절 하나가 움직이는 경로
+
+왼쪽 무릎 슬라이더를 움직인다고 생각해 보자. 패널은 원하는 각도를 보낸다. 컨트롤러는 그 목표를 구동부에 전달한다. RViz2에서 무릎이 움직이려면 구동부가 돌려준 관절각으로 링크 자세를 다시 계산해야 한다.
+
+![TRON2 WF의 제어 계층과 세 실행 대상](tron2_figures/wf_architecture.svg)
+
+**그림 1 · WF 시스템 구성.** 위에서 아래로 실행 구성을 읽는다. 왼쪽 가지는 형상과 자세를 표시하고, 오른쪽 가지는 관절 명령과 피드백을 처리한다. 수업에서는 패널이 목표를 발행한다. RL 정책을 연결하려면 출력을 같은 관절 목표 메시지로 변환해야 한다. 맨 아래는 controller manager에 등록되는 장치 이름이다. 세 장치가 공통 플러그인을 사용한다.
+
+**수업에서 따라갈 경로**   SDK 수신과 기록은 2–6쪽, MuJoCo·Gazebo·실기체 흐름은 7–9쪽, 관절 명령과 응답 측정은 10–11쪽이다. 12쪽부터 패키지를 실행한다. 14쪽의 실제 노드 그래프와 17쪽의 화면 지연 측정은 실행 중 무엇을 관찰해야 하는지 보여 준다. 20–24쪽에서는 슬라이더를 속도 조이스틱으로 바꿔 WF 정책의 균형과 속도 한계를 측정한다.
+
+구성 근거는 `tron2_bringup`·`tron2_dashboard`의 launch와 `tron2_control/launch/control.launch.py`다. 실기체의 controller manager는 운영 PC에서 실행하며, 기존 SBC 브리지에 ROS 토픽으로 연결한다.
+
+## 발형 모델에서 관절·IMU 기록 준비하기
 
 두 실습은 서로 다른 형상의 로봇을 사용한다. 먼저 발형 모델(SF_TRON2A)에서 SDK 상태를 ROS 2로 받아 기록한다. 이어서 바퀴형 모델(WF_TRON2A)에서 패널의 목표가 어느 제어기를 거쳐 모터에 도달하는지, 어느 상태가 RViz2로 돌아오는지 추적한다.
 
@@ -6,7 +18,7 @@
 
 `SF 시뮬레이터 → LimX SDK → sdk_bridge.py → 관절·IMU 토픽 → rosbag`
 
-WF 실습은 패널과 ros2_control을 추가한다. 6–9쪽은 MuJoCo와 실기체의 데이터 흐름 및 응답 측정, 10–16쪽은 패키지 빌드, 제어기 추적, GPU 확인과 화면 지연 진단을 다룬다.
+뒤의 WF 실습에서는 이 수신 경로에 패널과 컨트롤러를 연결해 명령과 피드백을 함께 관찰한다.
 
 ### 실습 파일 열기
 
@@ -33,6 +45,10 @@ ros2 topic echo /tron2/joint_states sensor_msgs/msg/JointState --once
 ## 시뮬레이터와 브리지를 분리해서 읽기
 
 TRON2 · SDK에서 ROS로
+
+![SDK 패킷에서 JointState와 Imu로 변환되는 두 경로](tron2_figures/sdk_fields.svg)
+
+**그림 2 · 발형 모델의 센서 경로.** 위쪽은 관절 배열, 아래쪽은 IMU 샘플이다. 같은 시각에 두 콜백이 실행된다고 가정하지 않고 토픽별 stamp를 확인한다.
 
 ```
 cd ~/sainty/day5
@@ -163,7 +179,7 @@ model에서는 joint_state_publisher가 상태값을 공급한다. control에서
 
 ![MuJoCo 명령·피드백·몸체 TF 흐름](tron2_figures/mujoco.svg)
 
-**그림 1.** 패널의 목표는 wf_joint_controller와 SystemInterface.write를 거쳐 SDK 브리지에 도착한다. 브리지가 LimX SDK에 RobotCmd를 보낸다. 시뮬레이터가 토크를 적용하고 물리 상태를 적분한 뒤에야 관절각과 IMU 값이 돌아온다. rqt_graph는 그림에서 ROS 2로 연결한 구간을 보여준다.
+**그림 3 · MuJoCo 명령과 피드백.** 패널의 목표는 wf_joint_controller와 SystemInterface.write를 거쳐 SDK 브리지에 도착한다. 브리지가 LimX SDK에 RobotCmd를 보낸다. 시뮬레이터가 토크를 적용하고 물리 상태를 적분한 뒤에야 관절각과 IMU 값이 돌아온다. rqt_graph는 그림에서 ROS 2로 연결한 구간을 보여준다.
 
 ### 실행하고 무릎과 바퀴를 구별하기
 
@@ -182,13 +198,32 @@ ros2 run tf2_ros tf2_echo world tron2/base_Link
 
 SDK가 돌려준 관절각으로 링크 TF를 계산한다. 몸체의 세계 위치·회전은 별도 모듈이 MuJoCo 자유 관절에서 읽는다. 넘어지는 동안 자세와 높이까지 보이는 이유다. 기존 바퀴 각도(±180°) 실습은 `./panel_control.sh control`로 연다.
 
+## Gazebo에서 같은 무릎 목표를 따라가기
+
+`backend:=gz`를 선택하면 패널과 ROS 컨트롤러는 같은 토픽을 사용한다. 하위 명령의 구독자는 Gazebo 모델 플러그인이다. 아래에서 세 번째 줄과 네 번째 줄은 같은 물리 상태를 서로 다른 창으로 전달한다.
+
+![Gazebo 명령과 물리 상태가 RViz2와 Gazebo 창으로 갈라지는 흐름](tron2_figures/gazebo_flow.svg)
+
+**그림 4 · 명령 하나, 두 화면.** 맨 위 두 줄은 명령과 물리 계산이다. 청록색 줄에서 관절 상태는 broadcaster와 robot_state_publisher를 거쳐 RViz2의 링크 자세로 이어진다. 오른쪽에서 갈라지는 선은 Gazebo GUI용 장면 데이터다. 플러그인은 몸체의 세계 자세도 TF로 보낸다.
+
+### 두 터미널에서 경계 확인하기
+
+```bash
+ros2 topic info /tron2/wf_targets -v
+ros2 topic echo /tron2/joint_states --once
+```
+
+첫 명령에서 구독 노드 `/tron2/gz_joint_control`을 찾는다. 두 번째 명령의 관절 배열에서 `knee_L_Joint`의 위치가 변하면 목표가 물리 관절에 반영된 것이다. RViz2가 먼저 움직이고 Gazebo 창만 늦으면 17쪽에서 장면, 렌더 직전 자세, 창의 픽셀을 순서대로 비교한다.
+
+구현 위치는 `tron2_gz/src/wheel_foot_system.cpp`와 `tron2_control/src/system.cpp`다.
+
 ## Day 5 · 실기체의 온보드 브리지와 조작 PC 연결하기
 
 **준비 환경.** 이 구현은 ROS 2 Humble, Python 3.10, WF_TRON2A EDU 저수준 SDK를 대상으로 한다. SBC에서 `echo "$ROS_DISTRO"`와 `uname -m`을 확인한다. 제조사 문서의 탑재 이미지 설명에는 버전 차이가 있다. ARM64 SBC에는 aarch64용 SDK, x86_64 SBC에는 amd64용 SDK를 사용한다. 운영 PC는 패널과 controller_manager를 실행한다.
 
 ![실기체의 명령·센서 피드백·선택적 상태 추정 흐름](tron2_figures/hardware.svg)
 
-**그림 2.** 운영 PC의 관절 컨트롤러와 하드웨어 인터페이스를 거친 목표가 DDS를 통해 기존 SBC 브리지에 도착한다. 브리지는 명시적으로 지정한 기체 SDK 주소에 연결한다. 주제어기가 제공하는 엔코더와 IMU는 반대 방향으로 돌아온다. 기본 실기체 화면은 몸체 기준의 관절 움직임을 표시한다. 전역 위치·낙상 높이를 보려면 별도의 상태 추정기가 실제 TF를 제공하고 RViz2 기준 프레임을 그 부모 프레임으로 바꿔야 한다.
+**그림 5 · 운영 PC와 기체의 경계.** 운영 PC의 관절 컨트롤러와 하드웨어 인터페이스를 거친 목표가 DDS를 통해 기존 SBC 브리지에 도착한다. 브리지는 명시적으로 지정한 기체 SDK 주소에 연결한다. 주제어기가 제공하는 엔코더와 IMU는 반대 방향으로 돌아온다. 기본 실기체 화면은 몸체 기준의 관절 움직임을 표시한다. 전역 위치·낙상 높이를 보려면 별도의 상태 추정기가 실제 TF를 제공하고 RViz2 기준 프레임을 그 부모 프레임으로 바꿔야 한다.
 
 ### 먼저 모터 출력 없이 연결하기
 
@@ -310,6 +345,20 @@ ros2 run tf2_ros tf2_echo world tron2/base_Link
 
 **하드웨어 인터페이스**  실기체에서는 PC의 SystemInterface가 하위 목표를 전달하고 기존 LimX SDK 브리지가 모터와 통신한다. [ROS 2 Humble 하드웨어 구성 요소 문서](https://control.ros.org/humble/doc/ros2_control/hardware_interface/doc/writing_new_hardware_component.html)
 
+## 실행 중인 노드 그래프 읽기
+
+Gazebo 서버와 시뮬레이션 대시보드를 같은 ROS 도메인에서 실행하고 rqt_graph의 **Nodes/Topics (active)** 보기로 캡처했다. **타원은 노드, 사각형은 토픽**이다. 화살촉을 따라가면 명령이 나가는 길과 실측값이 돌아오는 길을 구분할 수 있다.
+
+![실행 중인 rqt_graph에서 Gazebo의 하위 명령과 관절 상태가 왕복하는 화면](tron2_figures/rqt_capture.png)
+
+**그림 6 · rqt_graph 실화면.** 토픽 필터에 `/tron2/wf_targets,/tron2/joint_states`를 넣어 구동부 구간을 확대했다. MuJoCo에서 같은 필터를 사용하면 하위 명령을 받는 쪽은 SDK 브리지의 `/tron2_telemetry` 노드다.
+
+![실행 중 조회한 Gazebo ROS 그래프의 목표 두 단계와 상태 두 단계](tron2_figures/gz_nodes.svg)
+
+**그림 7 · 같은 실행의 네 연결.** 각 행을 왼쪽에서 오른쪽으로 읽는다. 가운데 토픽 양쪽은 DDS에서 조회한 발행·구독 노드다. 표기는 공통 접두사 `/tron2/`를 생략했다. 마지막 줄의 실측 상태는 패널과 robot_state_publisher가 각각 구독한다.
+
+**그림 사이의 빈 구간 읽기**   첫 줄의 `wf_joint_controller`와 둘째 줄의 `hardware_transport` 사이에서는 manager가 할당한 명령 인터페이스에 목표를 쓰고 플러그인이 읽는다. 이 프로세스 내부 구간은 다음 쪽의 `ros2 control` 명령으로 확인한다. 캡처 당시 관절 컨트롤러와 두 broadcaster 모두 `active`였다.
+
 ## 실습 3 · rqt_graph와 제어 자원 점유를 함께 읽기
 
 rqt_graph에서 Nodes/Topics 보기를 선택하고 새로고침한다. 패널에서 컨트롤러로 들어가는 `targets`와 broadcaster에서 나오는 상태 토픽을 찾는다. manager가 플러그인의 `read()`와 `write()`를 호출하는 과정은 같은 프로세스 안에서 진행된다. 자원 점유는 controller manager의 서비스로 조회한다.
@@ -370,17 +419,13 @@ grep GL_RENDERER ~/.ignition/rendering/ogre.log | tail -1
 
 Gazebo 창이 약 138 FPS를 표시하는 동안 RViz2에서는 무릎이 즉시 움직였고 Gazebo의 로봇만 뒤늦게 움직였다. 클릭 시각을 0으로 놓고, 같은 무릎 목표를 반복 적용하며 아래 경계를 차례로 계측했다. 행별 범위에는 서로 다른 반복 시험이 포함된다.
 
-| 관찰 지점 | 클릭 후 관찰 시간 | 이 값이 알려주는 것 |
-|---|---:|---|
-| ROS 관절 피드백 | 41–58 ms | 패널 입력이 물리 관절까지 전달됐다. |
-| Gazebo 장면 메시지의 무릎 자세 | 58–91 ms | 서버가 GUI에 전달할 새 자세를 만들었다. |
-| 렌더 직전 GUI 내부 무릎 링크 | 72–75 ms | 렌더러의 장면에도 새 자세가 도착했다. |
-| 수정 전 Gazebo 창의 픽셀 | 220–904 ms | 창에는 이전 자세가 오래 남았다. |
-| 수정 후 Gazebo 창의 픽셀 | 66–166 ms | 5회 값은 166, 74, 94, 66, 91 ms. 중앙값 91 ms. |
+![동일한 무릎 명령 뒤 ROS 상태, Gazebo 장면, 창 픽셀의 응답 시간 범위](tron2_figures/gz_latency.png)
+
+**그림 8 · 클릭부터 화면까지.** 각 선은 해당 관측 지점에서 기록한 최소·최대 시간이다. 수정 전에는 렌더 직전 링크가 72–75 ms에 바뀌었는데 창 픽셀은 220–904 ms에 바뀌었다. 수정 뒤 창에서 관측한 다섯 값은 166, 74, 94, 66, 91 ms였고 중앙값은 91 ms였다. 각 줄은 클릭을 기준으로 하므로 범위를 더하거나 서로 빼지 않는다.
 
 **수정한 지점**  Fortress의 OGRE 카메라가 그린 텍스처를 Qt가 다른 GL 컨텍스트에서 표시한다. `tron2_gz/gui/Tron2FrameSync.cpp`는 WSLg의 D3D12 렌더러에서 카메라 렌더 이후 `glFinish()`로 생산 측 GPU 작업 완료를 기다린다. 실제 화면에서는 지연 감소와 중간 자세의 연속 표시를 확인했다. 이 결과는 해당 노트북과 렌더링 경로에서의 관측이다.
 
-**측정 방법**  목표가 바뀐 시각, 관절 피드백, 렌더 직전의 무릎 링크, 실제 창의 같은 영역을 기록한다. 이 시험에서는 약 14 ms 간격으로 화면을 캡처하고 픽셀 변화가 해당 시행 전체 변화의 5%를 넘은 첫 시점을 사용했다. 9쪽의 80% 도달 시간은 관절각 변화의 지표다. 화면의 5% 변화와 한 열에 섞으면 서로 다른 현상을 같은 지연으로 읽게 된다.
+**측정 방법**  목표가 바뀐 시각, 관절 피드백, 렌더 직전의 무릎 링크, 실제 창의 같은 영역을 기록한다. 이 시험에서는 약 14 ms 간격으로 화면을 캡처하고 픽셀 변화가 해당 시행 전체 변화의 5%를 넘은 첫 시점을 사용했다. 11쪽의 80% 도달 시간은 관절각 변화의 지표다. 화면의 5% 변화와 한 열에 섞으면 서로 다른 현상을 같은 지연으로 읽게 된다.
 
 **실습 질문**  FPS가 높고 렌더러 내부 링크 자세까지 제때 변한다면 다음에 관측할 곳은 어디인가? 그래픽 메모리에 그린 이미지가 최종 창에 표시되는 시각을 답에 포함한다.
 
@@ -390,10 +435,10 @@ Gazebo 창이 약 138 FPS를 표시하는 동안 RViz2에서는 무릎이 즉시
 |---|---|---|
 | Gazebo와 MuJoCo 창이 동시에 열렸다 | 실행 중인 브링업과 엔진 이름. Gazebo의 server와 gui는 한 엔진의 두 프로세스다. | 기존 브링업을 Ctrl+C로 끝낸 후 다음 backend를 선택한다. 현재 launch는 다른 터미널·도메인의 중복 시작도 거절한다. 잠금 파일을 지워서 우회하지 않는다. |
 | 패널을 움직여도 MuJoCo가 조용하다 | 뷰어 일시정지, 조작 모드, 컨트롤러 active, 패널 targets와 하위 wf_targets를 순서대로 확인한다. | 물리를 재개하고 simulation 모드를 확인한다. 실기체 모드에서는 허용 상태에서 적용 버튼을 누르는 동안만 명령이 갱신된다. |
-| rqt_graph에 제어기가 보이지 않거나 패널이 구동부와 직접 연결된다 | `ros2 control list_controllers`와 토픽의 실제 발행자. 예전 수업 코드에서는 패널이 하위 토픽을 직접 발행했다. | 현재 워크스페이스를 빌드·소싱하고 12쪽의 비활성화 시험으로 명령 경로를 확인한다. |
-| 관절 반응이 지나치게 느리다 | 목표 토픽과 실제 관절각을 함께 기록한다. 예전 패널은 목표를 0.35 rad/s씩 바꿨다. | WF 공식 설정과 현재 코드 경로를 확인한다. RViz가 먼저 움직이는 경우 14쪽의 표시 지연 검사를 수행한다. |
+| rqt_graph에 제어기가 보이지 않거나 패널이 구동부와 직접 연결된다 | `ros2 control list_controllers`와 토픽의 실제 발행자. 예전 수업 코드에서는 패널이 하위 토픽을 직접 발행했다. | 현재 워크스페이스를 빌드·소싱하고 15쪽의 비활성화 시험으로 명령 경로를 확인한다. |
+| 관절 반응이 지나치게 느리다 | 목표 토픽과 실제 관절각을 함께 기록한다. 예전 패널은 목표를 0.35 rad/s씩 바꿨다. | WF 공식 설정과 현재 코드 경로를 확인한다. RViz가 먼저 움직이는 경우 17쪽의 표시 지연 검사를 수행한다. |
 | 모델의 링크는 보이는데 몸체 낙상이 RViz에 표시되지 않는다 | 기준 프레임, `/tron2/robot_description`, 몸체 TF와 관절 TF를 각각 확인한다. | 시뮬레이션은 world, 실기체 기본 화면은 tron2/base_Link를 선택한다. echo가 XML을 말줄임해도 RViz의 메시 로딩 오류는 별도로 확인한다. |
-| GeForce가 있는데 뷰어가 내장 GPU를 선택한다 | `nvidia-smi` 장치 이름과 뷰어 PID를 대조한다. Gazebo는 OGRE 렌더러 로그도 확인한다. | 13쪽의 백엔드별 선택 방법으로 새 프로세스를 띄운다. GPU 변경 후에도 지연이 남으면 화면 단계까지 측정한다. |
+| GeForce가 있는데 뷰어가 내장 GPU를 선택한다 | `nvidia-smi` 장치 이름과 뷰어 PID를 대조한다. Gazebo는 OGRE 렌더러 로그도 확인한다. | 16쪽의 백엔드별 선택 방법으로 새 프로세스를 띄운다. GPU 변경 후에도 지연이 남으면 화면 단계까지 측정한다. |
 | Gazebo 서버만 실행하면 피드백이 오지만 GUI를 켜면 시작 중 종료된다 | WSLg에서 최초 OGRE2 실행 로그에 `GL3PlusTextureGpu::copyTo` 예외가 기록됐다. 이는 실행 후 자세가 늦게 표시된 사례와 증상이 다르다. | 현재 패키지의 Gazebo launch는 GUI에 OGRE를 지정한다. `gz_gui:=false`로 서버를 따로 확인하고 GUI 실행 로그를 비교한다. |
 | PC에서 기체 토픽이 보이는데 명령이 거절된다 | 두 호스트의 시각, motion 허용 상태, 목표의 헤더 시각·수신 간격을 확인한다. | 관찰 모드에서 관절 10개의 이름과 피드백부터 확인한다. 두 호스트 시각과 DDS 설정을 맞춘 뒤 제조사 시운전 절차를 따른다. |
 
@@ -403,7 +448,7 @@ Gazebo 창이 약 138 FPS를 표시하는 동안 RViz2에서는 무릎이 즉시
 
 ![NVIDIA 선택 조건에서 단독 실행한 공식 MuJoCo WF 뷰어](tron2_figures/mujoco_nvidia.png)
 
-**현장 캡처**  RTX 3060 Laptop GPU를 명시한 시험의 MuJoCo 뷰어다. 동일한 PID 31687에서 읽은 GL_RENDERER와 `nvidia-smi` 결과를 13쪽에 기록했다. 화면에 로봇이 보이는 것만으로는 어느 GPU가 그렸는지 구분할 수 없다.
+**그림 9 · MuJoCo 실행 화면.**  RTX 3060 Laptop GPU를 명시한 시험의 MuJoCo 뷰어다. 동일한 PID 31687에서 읽은 GL_RENDERER와 `nvidia-smi` 결과를 16쪽에 기록했다. 화면에 로봇이 보이는 것만으로는 어느 GPU가 그렸는지 구분할 수 없다.
 
 | 제출할 기록 | 판정 기준 |
 |---|---|
@@ -413,3 +458,128 @@ Gazebo 창이 약 138 FPS를 표시하는 동안 RViz2에서는 무릎이 즉시
 | 지연 진단 한 문장 | 가장 먼저 늦어진 경계, 판단에 쓴 측정값, 아직 확인하지 않은 부분을 구분한다. |
 
 **종료 순서**  시뮬레이션 패널에서 명령을 해제하고 대시보드와 브링업을 종료한다. 실기체 수업에서는 제조사의 지지·감쇠·비상정지 절차를 별도로 따른다.
+
+## TRON2 WF · 조이스틱으로 균형을 잡고 주행하기
+
+두 바퀴로 선 WF_TRON2A에 전진 속도와 회전 속도를 보낸다. 손을 놓으면 목표 속도가 0으로 돌아오며, 정책은 넘어지지 않도록 관절과 바퀴를 계속 조절한다. 이 실습은 MuJoCo 한 대를 구동한다.
+
+![곡선 주행 시험 중 캡처한 MuJoCo와 속도 조이스틱](tron2_figures/wf_drive_windows.png)
+
+**실행 화면.** 원의 위·아래는 전진·후진, 왼쪽·오른쪽은 좌회전·우회전이다. 중심에서 멀어질수록 명령이 커진다. 대각선으로 끌면 전진하면서 회전한다. 상태 표시줄은 입력 목표를 표시한다.
+
+### 처음 한 번 준비하기
+
+```bash
+cd ~/sainty/day5
+git submodule update --init --depth 1 -- tron2_sdk/vendor/tron2_rl_deploy_python
+(cd tron2_sdk && uv sync --locked && uv run --locked python fetch_models.py)
+cd sainty_ws
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install --packages-up-to tron2_bringup
+source install/setup.bash
+ros2 launch tron2_bringup policy_drive.launch.py
+```
+
+다음 실행부터는 새 터미널에서 워크스페이스의 `install/setup.bash`를 소싱하고 마지막 줄을 실행한다. RViz2도 보려면 `rviz:=true`를 붙인다. 기존 MuJoCo 또는 Gazebo 브링업을 먼저 종료한다. 조이스틱이나 뷰어를 닫으면 이 launch가 시작한 프로세스들이 종료된다.
+
+**첫 관찰**   중심에서 손을 놓고 몸체가 서 있는지 확인한다. 원을 조금만 위로 민 다음, 끝까지 밀어 하단의 m/s 값이 어떻게 달라지는지 읽는다. MuJoCo 카메라는 몸체를 따라간다. 실제 이동량은 뒤의 `/tron2/odom` 실습에서 측정한다.
+
+## 정책이 균형을 만드는 20 ms
+
+![실행 중인 rqt_graph에서 velocity_joystick이 cmd_vel로 policy_drive에 연결된 화면](tron2_figures/wf_drive_rqt.png)
+
+**ROS 경계.** `velocity_joystick`이 `/tron2/cmd_vel`에 Twist를 20 Hz로 발행한다. `linear.x`는 m/s, `angular.z`는 rad/s이며 양의 회전은 왼쪽이다. 노드가 0.25초 동안 새 명령을 받지 못하면 다음 추론부터 두 목표를 0으로 사용한다.
+
+![정책의 관측 이력, 인코더, 액터, PD 토크, 물리 상태가 닫힌 고리를 이루는 흐름](tron2_figures/wf_policy_loop.svg)
+
+같은 화면을 열려면 소싱한 터미널에서 `ros2 run rqt_graph rqt_graph`를 실행하고 Nodes/Topics (active) 보기에서 `/tron2/cmd_vel`을 찾는다.
+
+**정책 내부.** `train_tron2_wf.py`의 `WheelDrive`와 `session()`을 재사용한다. 시작 때 CPU ONNX Runtime 세션 두 개를 열고, 매 틱에 관측 이력으로 인코더를 실행한 뒤 속도 명령을 포함한 40개 값을 액터에 넣는다. 앞의 이력과 직전 행동은 방향을 바꿀 때도 이어진다.
+
+### RViz2가 읽는 값
+
+`policy_drive`는 적분이 끝난 관절 10개의 상태를 `/tron2/joint_states`에 발행한다. `robot_state_publisher`가 URDF와 관절각으로 링크 TF를 만들고, 정책 노드는 몸체에서 읽은 `world → tron2/base_Link` TF와 오도메트리를 발행한다.
+
+이 launch의 모터 명령 소유자는 정책이다. 앞 교안에서 쓰던 관절 슬라이더와 ros2_control 관절 브링업은 별도 실습에서 실행한다. 코드 진입점은 `tron2_bringup/launch/policy_drive.launch.py`, 추론은 `tron2_bringup/policy_drive.py`, 조이스틱은 `tron2_dashboard/velocity_joystick.py`다.
+
+## 누가 속도를 정하는가 · 기립 자세에서 시작하는 이유
+
+| 확인 대상 | 수치 또는 동작 | 실습에서의 의미 |
+|---|---|---|
+| LimX 휠형 제품 사양 | 최대 이동 속도 3–5 m/s | 제조사가 발표한 기체 성능 범위다. 영상 한 장면의 속도는 거리와 시간 계측이 필요하다. |
+| 공개 WF 예제 | 전후 ±0.7 m/s, 좌우 이동 0, 회전 ±1.0 rad/s | `params.yaml`의 `commands.max`와 제조사 Python 컨트롤러의 스틱 처리 코드에서 확인한다. |
+| 수업의 기본 모드 | `profile:=reference` | 시작할 때 설치된 WF YAML에서 위 값을 읽고, UI와 명령 수신 측에 같은 범위를 적용한다. |
+| 수업의 확장 모드 | `profile:=experiment` | 기본 스틱 범위 ±5 m/s와 ±4 rad/s는 이번 시험 설계값이다. 두 축을 launch 인자로 각각 바꿀 수 있다. |
+
+제조사 예제는 스틱을 정규화하고 `_process_joystick()`에서 설정값으로 스케일·클립한다. 해당 버전의 관측 생성 코드에는 명령을 한 번 더 스케일하는 단계도 있다. 수업은 사용자가 지정한 `test_wf_direction.py`의 입력 계약에 따라 액터 입력 마지막 세 칸에 `[vx, 0, wz]`를 직접 넣는다. 따라서 실습의 목표와 결과는 이 경로를 기준으로 읽는다. 공개 자료에서 모든 시뮬레이션에 0.7 m/s를 강제하는 지침은 확인하지 못했다. [제조사 휠형 사양](https://www.limxdynamics.com/ko/products/tron2/spec) · [WF 설정](https://github.com/limxdynamics/tron2_rl_deploy_python/blob/dc27d921df839c27f7ab47308af2e3e82ec9265e/controllers/model/WF_TRON2A/params.yaml) · [제조사 컨트롤러](https://github.com/limxdynamics/tron2_rl_deploy_python/blob/dc27d921df839c27f7ab47308af2e3e82ec9265e/controllers/WheelfootController.py)
+
+### 같은 정책으로 다른 범위 시험하기
+
+```bash
+ros2 launch tron2_bringup policy_drive.launch.py profile:=experiment
+# 위 세션을 종료한 후 전후 ±2 m/s, 회전 ±1.5 rad/s로 다시 실행
+ros2 launch tron2_bringup policy_drive.launch.py profile:=experiment max_linear:=2.0 max_yaw:=1.5
+```
+
+바뀌는 것은 목표 속도의 범위다. 두 모드는 같은 가중치·질량·토크 한계·바닥을 사용한다. 고속 시험에서 넘어지면 마지막 상태를 발행하고 세션이 종료된다.
+
+### 실기체의 낙상 복구와 공개 모델
+
+제조사 사용자 매뉴얼에는 휠형의 낙상 감지 후 기립 기능이 명시돼 있다. 공식 GitHub·Hugging Face와 공개 검색에서 이 MuJoCo WF 모델에 적용 가능한 독립 복구 체크포인트는 확인하지 못했다. 공개 예제의 `handle_stand_mode()`는 초기·기본 관절각을 보간한다. 실습은 `WheelDrive.reset()`으로 기본 관절각과 몸체 방향을 설정하고 바퀴가 바닥에 닿게 높이를 맞춘다. 이 초기화는 쓰러진 로봇이 스스로 일어나는 능력을 검증하지 않는다. [실기체 매뉴얼](https://www.limxdynamics.com/en/documents/852949782845591552) · [공개 WF 파일](https://huggingface.co/limxdynamics/tron2-rl-locomotion-policies/tree/main/WF_TRON2A)
+
+## 목표 속도와 실제 속도를 따로 측정하기
+
+실제 조이스틱 위젯에 마우스 입력을 보내 정지, 전후진, 제자리 회전, 곡선, 해제를 연속 실행했다. 오른쪽 끝에서는 주행 중 조이스틱 발행을 2초간 중단해 입력 만료를 시험했다. 점선이 비어 있는 구간은 새 명령이 도착하지 않은 시간이다.
+
+![속도 조이스틱 명령과 몸체 전후·회전 실측의 시간 그래프](tron2_figures/wf_policy_trace.png)
+
+| 조작 | 전후 목표 / 실측 (m/s) | 회전 목표 / 실측 (rad/s) |
+|---|---:|---:|
+| 전진 | +0.397 / +0.357 | -0.000 / -0.032 |
+| 최대 전진 | +0.700 / +0.666 | -0.000 / -0.058 |
+| 후진 | -0.397 / -0.433 | -0.000 / -0.032 |
+| 좌회전 | -0.000 / -0.010 | +0.802 / +0.827 |
+| 우회전 | -0.000 / -0.038 | -0.802 / -0.916 |
+| 전진과 좌회전 | +0.315 / +0.281 | +0.360 / +0.344 |
+| 손 놓음 | -0.000 / -0.029 | -0.000 / -0.012 |
+
+**검증 기준.** 각 동작을 약 3초 유지하고 초기 0.8초를 제외해 평균을 냈다. 최대 전진에서는 몸체의 월드 위치 변화량을 진행 방향에 투영해서도 속도를 계산했다. 관성 주축과 링크 좌표축이 다르므로 `Odometry.twist`는 MuJoCo의 `mjOBJ_XBODY`를 사용해 `tron2/base_Link` 축으로 표현한다.
+
+기립과 방향 전환을 포함한 28.4초 동안 최저 높이는 0.712 m, 최대 몸체 기울기는 4.5°였다. 최대 전진에서 위치 기반 평균은 0.666 m/s였다. 발행을 중단한 뒤 1.25~2초 구간의 전후 속도는 -0.016 m/s였다.
+
+```bash
+source ~/sainty/day5/sainty_ws/install/setup.bash
+cd ~/sainty/day5
+python3 ros_lab/measure_wf_speed.py --seconds 3
+```
+
+다른 터미널에서 측정하는 동안 스틱을 일정하게 유지한다. 출력의 `pose rate`는 위치 변화 기반 속도, `mean twist`는 속도 메시지의 시간 평균이다. 정지 명령에서도 균형을 잡는 동안 작은 잔류 이동이 생긴다.
+
+## 입력을 5 m/s까지 올리면 어디서 넘어지는가
+
+같은 초기 자세에서 매 시험을 다시 시작했다. 첫 1초는 정지, 이후에는 목표를 즉시 주거나 2초 동안 선형으로 증가시킨다. 6초 또는 20초 유지한 뒤 마지막 2초의 평균을 계산한다. 걸린 시간은 시뮬레이션 시각이며 낙상 시간에는 첫 1초도 포함한다.
+
+| 전진 목표 | 즉시 입력 | 2초 가속 입력 |
+|---|---|---|
+| 0.7 m/s · 6초 유지 | 0.662 m/s | 0.661 m/s |
+| 2.0 m/s · 20초 유지 | 2.254 m/s | 2.254 m/s |
+| 2.2 m/s · 20초 시도 | 9.24초에 낙상 | 6.90초에 낙상 |
+| 2.6 m/s · 20초 시도 | 기립 유지, 1.313 m/s | 4.74초에 낙상 |
+| 3.0 m/s · 20초 시도 | 4.82초에 낙상 | 4.62초에 낙상 |
+| 4.0 m/s · 6초 시도 | 3.28초에 낙상 | 기립 유지, −0.098 m/s |
+| 5.0 m/s · 6초 시도 | 2.24초에 낙상 | 4.36초에 낙상 |
+
+**판독.** 2.0 m/s에서는 서 있었지만 목표보다 약 13% 빨랐다. 2.6 m/s 즉시 입력에서는 목표보다 느렸고, 4.0 m/s 가속 입력에서는 진행 방향까지 바뀌었다. 따라서 낙상 여부와 속도 오차를 함께 읽는다. 이산적으로 시험한 평지·초기 자세 한 종류의 결과이므로 2.0 m/s를 절대 임계속도로 해석할 수 없다.
+
+**후진과 회전.** −2.0 m/s 즉시 입력에서는 −4.588 m/s까지 과속했다(마지막 2초 평균). +4.0 rad/s 회전은 +3.813 rad/s, −4.0 rad/s는 −3.108 rad/s였다. 독립 시뮬레이션 시험에 더해 실제 확장 launch에서도 스틱 끝이 +5.0 m/s를 발행하고 낙상 시 세션이 종료되는 것을 확인했다.
+
+### 같은 46개 조건 재현하기
+
+```bash
+cd ~/sainty/day5
+tron2_sdk/.venv/bin/python ros_lab/sweep_wf_policy.py > wf_sweep.csv
+tron2_sdk/.venv/bin/python ros_lab/sweep_wf_policy.py --hold-seconds 20 \
+  --linear 2 2.2 2.4 2.6 2.8 3 --yaw > wf_forward_20s.csv
+```
+
+시험 프로그램은 화면 없이 물리를 적분한다. `fallen`은 몸체의 위쪽 축과 세계 수직축의 내적이 0.65 미만이거나 높이가 0.40 m 미만일 때 참이다. `steady_rate`는 완주한 시험에서만 기록된다. CSV에는 최대 기울기와 최저 높이도 담았다. 측정 파일은 교안 폴더의 `tron2_figures/wf_policy_sweep.csv`다.

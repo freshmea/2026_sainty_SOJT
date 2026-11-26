@@ -7,6 +7,7 @@ import time
 import rclpy
 from geometry_msgs.msg import TransformStamped
 from tf2_ros import TransformBroadcaster
+from .wf_camera import BodyCamera
 
 ROOT = Path(os.environ.get('TRON2_SDK_ROOT', Path.home() / 'sainty/day5/tron2_sdk'))
 sys.path.insert(0, str(ROOT / 'upstream' / 'tron2_mujoco_sim'))
@@ -22,11 +23,13 @@ class BaseTransform(SimModule):
         self.node = node
         self.broadcaster = TransformBroadcaster(node)
         self.next_publish = 0.0
+        self.camera = None
 
     def attach(self, core):
         # qpos holds the post-integration pose of the floating root, also used by the viewer.
         joint = core.model.body('base_Link').jntadr[0]
         self.start = int(core.model.jnt_qposadr[joint])
+        self.camera = BodyCamera(self.node, core.model)
         return True
 
     def on_publish(self, core):
@@ -36,6 +39,7 @@ class BaseTransform(SimModule):
         self.next_publish = now + 0.02
         t = TransformStamped()
         t.header.stamp = self.node.get_clock().now().to_msg()
+        self.camera.sample(core.data, t.header.stamp)
         t.header.frame_id, t.child_frame_id = 'world', 'tron2/base_Link'
         pos = t.transform.translation
         rot = t.transform.rotation
@@ -60,6 +64,8 @@ def main():
         core.viewer.cam.lookat[:] = [0, 0, 0.34]
         core.run()
     finally:
+        if pose.camera is not None:
+            pose.camera.close()
         node.destroy_node()
         rclpy.try_shutdown()
 

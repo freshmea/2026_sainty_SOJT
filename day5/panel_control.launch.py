@@ -15,6 +15,8 @@ def include(package, filename, **arguments):
 def generate_launch_description():
     return LaunchDescription([
         DeclareLaunchArgument('backend', default_value='mujoco', choices=['mujoco', 'gz']),
-        include('tron2_bringup', 'simulation_bringup.launch.py', backend=LaunchConfiguration('backend')),
+        DeclareLaunchArgument('camera_view', default_value='true', choices=['true', 'false']),
+        include('tron2_bringup', 'simulation_bringup.launch.py', backend=LaunchConfiguration('backend'),
+                camera_view=LaunchConfiguration('camera_view')),
         include('tron2_dashboard', 'dashboard.launch.py', target='simulation'),
     ])

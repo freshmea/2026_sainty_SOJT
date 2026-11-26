@@ -1,0 +1,10 @@
+{
+  "export": "wsl_isaac_reference_s73",
+  "node": "/tron2/policy_drive",
+  "samples": 81,
+  "elapsed": 1.58492916799878,
+  "first_height_m": 0.7524363479705594,
+  "last_height_m": 0.4158694964661507,
+  "stop_reason": "fall detected by policy_drive",
+  "cmd_vel_m_s": 0.7
+}

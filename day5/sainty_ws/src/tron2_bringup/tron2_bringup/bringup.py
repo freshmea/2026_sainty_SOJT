@@ -30,3 +30,10 @@ def control_stack(backend):
     path = get_package_share_path('tron2_control') / 'launch/control.launch.py'
     return IncludeLaunchDescription(PythonLaunchDescriptionSource(str(path)),
                                     launch_arguments={'backend': backend}.items())
+
+
+def camera_window():
+    from launch.conditions import IfCondition
+    from launch.substitutions import LaunchConfiguration
+    return Node(package='rqt_image_view', executable='rqt_image_view',
+                arguments=['/tron2/color'], condition=IfCondition(LaunchConfiguration('camera_view')))

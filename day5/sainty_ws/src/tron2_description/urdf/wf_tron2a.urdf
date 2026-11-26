@@ -346,4 +346,11 @@
     <parent link="d435_Link"/>
     <child link="d435_optical_frame"/>
   </joint>  
+  <!-- ROS optical axes of the mounted WF simulation camera: right, down, forward. -->
+  <link name="wf_camera_optical"/>
+  <joint name="wf_camera_optical_joint" type="fixed">
+    <parent link="d435_Link"/>
+    <child link="wf_camera_optical"/>
+    <origin xyz="0 0 0" rpy="0 0 -1.5707963267948966"/>
+  </joint>
 </robot>

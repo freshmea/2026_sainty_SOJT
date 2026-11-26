@@ -7,7 +7,7 @@ from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction, Shutdown
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-from tron2_bringup.bringup import control_stack
+from tron2_bringup.bringup import camera_window, control_stack
 from tron2_bringup.sim_session import reserve_launch
 
 
@@ -31,7 +31,17 @@ def start(context):
         env['MESA_D3D12_DEFAULT_ADAPTER_NAME'] = adapter
     flags = ['--render-engine-gui', 'ogre'] if LaunchConfiguration('gui').perform(context) == 'true' else ['-s']
     return [
+        camera_window(),
         control_stack('gz'),
+        Node(package='ros_gz_bridge', executable='parameter_bridge', name='wf_camera_bridge',
+             arguments=['/tron2/wf_rgbd/image@sensor_msgs/msg/Image[ignition.msgs.Image',
+                        '/tron2/wf_rgbd/depth_image@sensor_msgs/msg/Image[ignition.msgs.Image',
+                        '/tron2/wf_rgbd/camera_info@sensor_msgs/msg/CameraInfo[ignition.msgs.CameraInfo'],
+             remappings=[('/tron2/wf_rgbd/image', '/tron2/color'),
+                         ('/tron2/wf_rgbd/depth_image', '/tron2/depth'),
+                         ('/tron2/wf_rgbd/camera_info', '/tron2/camera_info')],
+             parameters=[{'override_frame_id': 'tron2/wf_camera_optical',
+                          'override_timestamps_with_wall_time': True}], output='screen'),
         ExecuteProcess(cmd=['ign', 'gazebo', '-r', *flags, str(share / 'worlds/classroom.sdf')],
                        additional_env=env, output='screen', on_exit=Shutdown(reason='Gazebo closed')),
         Node(package='ros_gz_sim', executable='create',
@@ -46,5 +56,6 @@ def generate_launch_description():
             'MESA_D3D12_DEFAULT_ADAPTER_NAME', 'NVIDIA' if Path('/dev/dxg').exists() else ''),
             description='WSLg D3D12 adapter substring, e.g. NVIDIA or AMD.'),
         DeclareLaunchArgument('gui', default_value='true', choices=['true', 'false']),
+        DeclareLaunchArgument('camera_view', default_value=LaunchConfiguration('gui'), choices=['true', 'false']),
         OpaqueFunction(function=start),
     ])

@@ -1,0 +1,9 @@
+{
+  "task": "high_speed",
+  "steps": 24576,
+  "seed": 73,
+  "target": 5.0,
+  "crouch_rad": 0.0,
+  "torch_onnx_checks": 32,
+  "input_size": 40
+}

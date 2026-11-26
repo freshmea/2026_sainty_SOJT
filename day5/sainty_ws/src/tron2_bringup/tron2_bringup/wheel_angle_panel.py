@@ -1,12 +1,13 @@
 """Send position targets from ten sliders and display measured motor angles."""
 import math
+import signal
 import tkinter as tk
 from tkinter import ttk
 
 import rclpy
 from sensor_msgs.msg import JointState
 
-from joint_control import COMMAND_TOPIC, limits
+from .joint_control import COMMAND_TOPIC, limits
 
 
 def main():
@@ -53,8 +54,17 @@ def main():
     ttk.Button(panel, text='모든 목표 0°', command=zero).grid(row=11, column=0)
     ttk.Label(panel, textvariable=status).grid(row=11, column=1, columnspan=2)
     node.create_subscription(JointState, '/tron2/joint_states', receive, 1)
+    closing = False
+
+    def request_close(signum, frame):
+        nonlocal closing
+        closing = True
+
+    signal.signal(signal.SIGINT, request_close)
+    signal.signal(signal.SIGTERM, request_close)
+
     def poll():
-        if rclpy.ok():
+        if not closing and rclpy.ok():
             rclpy.spin_once(node, timeout_sec=0)
             root.after(30, poll)
         else:

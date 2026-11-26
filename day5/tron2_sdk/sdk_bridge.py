@@ -69,7 +69,7 @@ def main():
     robot.subscribeImuData(imu)
     control = None
     if args.control:
-        from joint_control import PositionControl
+        from tron2_bringup.joint_control import PositionControl
         control = PositionControl(node, robot, wire)
     servo = WheelFootServo(node, robot, wire, args.enable_motion) if args.wf_panel else None
     sent = {}

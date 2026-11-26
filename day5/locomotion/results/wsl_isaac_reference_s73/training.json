@@ -1,0 +1,21 @@
+{
+  "backend": "WSL2 Linux / Isaac Sim 5.1 / Isaac Lab v2.3.1 / LimX rsl_rl 2.0.2",
+  "task": "reference",
+  "official_task": true,
+  "seed_option": 73,
+  "num_envs": 16,
+  "rollout_length": 24,
+  "iterations": 64,
+  "environment_steps": 24576,
+  "learning_seconds": 316.33,
+  "checkpoint": "/home/aa/sainty/day5/tron2_sdk/vendor/tron2_rl_lab/logs/rsl_rl/wf_tron_2a_flat/2026-11-27_04-45-47_wsl_reference_s73/model_64.pt",
+  "sha256": {
+    "model_64.pt": "9438670a6705288e44413c539d56aac42f4cc4dd2b247e047487a65f75d774ed",
+    "policy.onnx": "909946410714a7e599ffeb7c82dc9dae1b14cf60a9833f962041c32058b5e3b0",
+    "encoder.onnx": "eddc4606514fa7b9958776f211f68ddaa6a422e4675c04ec671bc025aa9e4363"
+  },
+  "max_abs_error_32_random_inputs": {
+    "policy": 5.960464477539062e-07,
+    "encoder": 1.430511474609375e-06
+  }
+}
