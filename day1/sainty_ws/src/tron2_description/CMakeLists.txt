@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.8)
+project(tron2_description)
+find_package(ament_cmake REQUIRED)
+install(DIRECTORY urdf meshes launch rviz DESTINATION share/${PROJECT_NAME})
+install(FILES LICENSE NOTICE THIRD_PARTY_NOTICES.md DESTINATION share/${PROJECT_NAME})
+ament_package()
