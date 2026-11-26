@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<robot name="tron2" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:arg name="device" default="LimxSystem"/>
+  <xacro:include filename="$(find tron2_description)/urdf/wf_tron2a.urdf"/>
+  <xacro:macro name="actuator" params="name mode">
+    <joint name="${name}_Joint">
+      <command_interface name="${mode}"/>
+      <state_interface name="position"/><state_interface name="velocity"/><state_interface name="effort"/>
+    </joint>
+  </xacro:macro>
+  <xacro:macro name="leg" params="side">
+    <xacro:actuator name="proximal_pitch_${side}" mode="position"/>
+    <xacro:actuator name="proximal_roll_${side}" mode="position"/>
+    <xacro:actuator name="proximal_yaw_${side}" mode="position"/>
+    <xacro:actuator name="knee_${side}" mode="position"/>
+    <xacro:actuator name="wheel_${side}" mode="velocity"/>
+  </xacro:macro>
+  <ros2_control name="$(arg device)" type="system">
+    <hardware>
+      <plugin>tron2_control/WheelFootSystem</plugin>
+      <param name="io_prefix">/tron2</param>
+    </hardware>
+    <xacro:leg side="L"/><xacro:leg side="R"/>
+    <gpio name="panel"><command_interface name="enable"/></gpio>
+    <sensor name="base_imu">
+      <state_interface name="orientation.x"/><state_interface name="orientation.y"/>
+      <state_interface name="orientation.z"/><state_interface name="orientation.w"/>
+      <state_interface name="angular_velocity.x"/><state_interface name="angular_velocity.y"/>
+      <state_interface name="angular_velocity.z"/><state_interface name="linear_acceleration.x"/>
+      <state_interface name="linear_acceleration.y"/><state_interface name="linear_acceleration.z"/>
+    </sensor>
+  </ros2_control>
+</robot>

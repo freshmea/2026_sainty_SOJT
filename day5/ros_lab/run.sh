@@ -8,7 +8,7 @@ export ROS_DOMAIN_ID="${ROS_DOMAIN_ID:-86}"
 day="$(cd "$(dirname "$0")/.." && pwd)"
 robot=${1:-}
 case "$robot" in
-  k1) project="$day/K1"; count=23 ;;
+  k1) project="$day/../day1/K1"; count=23 ;;
   tron2) project="$day/tron2_sdk"; count=10 ;;
   *) echo "usage: ./run.sh {k1|tron2}" >&2; exit 2 ;;
 esac
@@ -26,10 +26,14 @@ trap finish EXIT
 trap 'exit 130' INT TERM
 if [[ $robot == tron2 ]]; then
   uv run --locked fetch_models.py
-  export ROBOT_IP=127.0.0.1 ROBOT_TYPE=SF_TRON2A
+  export ROBOT_IP=127.0.0.1 ROBOT_TYPE="${2:-SF_TRON2A}"
+  case "$ROBOT_TYPE" in
+    SF_TRON2A|WF_TRON2A) ;;
+    *) echo "expected SF_TRON2A or WF_TRON2A" >&2; exit 2 ;;
+  esac
   setsid uv run --locked python vendor/tron2_mujoco_sim/simulator.py --headless --duration 75 > "$out/simulator.log" 2>&1 &
   pids+=("$!")
-  setsid uv run --locked sdk_bridge.py > "$out/sdk.log" 2>&1 &
+  setsid uv run --locked sdk_bridge.py --variant "$ROBOT_TYPE" > "$out/sdk.log" 2>&1 &
   pids+=("$!")
 else
   setsid uv run --locked verify_policy.py --no-render --ros2 --output-dir "$out/sim" > "$out/simulator.log" 2>&1 &

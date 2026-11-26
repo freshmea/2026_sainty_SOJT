@@ -80,7 +80,7 @@ if args.ros2:
     import time
     timing = []
     import rclpy
-    sys.path.insert(0, str(root.parent / 'ros_lab'))
+    sys.path.insert(0, str(root.parents[1] / 'day5' / 'ros_lab'))
     from telemetry import Telemetry
     rclpy.init()
     from geometry_msgs.msg import Twist

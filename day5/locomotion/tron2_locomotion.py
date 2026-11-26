@@ -10,7 +10,7 @@ from stable_baselines3 import PPO
 import torch
 
 ROOT = Path(__file__).resolve().parent
-MODELS = ROOT.parent / "day1/tron2_sdk/vendor/tron2_mujoco_sim/robot-description/tron2a"
+MODELS = ROOT.parent / "tron2_sdk/vendor/tron2_mujoco_sim/robot-description/tron2a"
 
 
 class VelocityTask(gym.Env):

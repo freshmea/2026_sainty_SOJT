@@ -1,0 +1,5 @@
+<library path="tron2_control_plugins">
+  <class name="tron2_control/WheelFootController" type="tron2_control::WheelFootController" base_class_type="controller_interface::ControllerInterface">
+    <description>Claim eight leg position interfaces, two wheel velocity interfaces and the motion enable gate.</description>
+  </class>
+</library>

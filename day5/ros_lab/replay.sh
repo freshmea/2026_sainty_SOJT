@@ -8,7 +8,7 @@ day="$(cd "$(dirname "$0")/.." && pwd)"
 robot=${1:?select k1 or tron2}
 input=$(realpath "${2:?pass the original ros result directory}")
 case "$robot" in
-  k1) project="$day/K1"; count=23 ;;
+  k1) project="$day/../day1/K1"; count=23 ;;
   tron2) project="$day/tron2_sdk"; count=10 ;;
   *) exit 2 ;;
 esac

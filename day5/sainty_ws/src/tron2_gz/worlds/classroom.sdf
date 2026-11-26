@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<sdf version="1.8">
+  <world name="classroom">
+    <gui>
+      <plugin filename="MinimalScene" name="3D View">
+        <ignition-gui>
+          <title>3D View</title>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="string" key="state">docked</property>
+        </ignition-gui>
+        <engine>ogre</engine>
+        <scene>scene</scene>
+        <ambient_light>0.4 0.4 0.4</ambient_light>
+        <background_color>0.8 0.8 0.8</background_color>
+        <camera_pose>2.35 -1.75 1.45 0 0.38 2.50</camera_pose>
+      </plugin>
+      <plugin filename="GzSceneManager" name="Scene Manager">
+        <ignition-gui>
+          <property key="resizable" type="bool">false</property>
+          <property key="width" type="double">5</property>
+          <property key="height" type="double">5</property>
+          <property key="state" type="string">floating</property>
+          <property key="showTitleBar" type="bool">false</property>
+        </ignition-gui>
+      </plugin>
+      <plugin filename="InteractiveViewControl" name="Interactive view control">
+        <ignition-gui>
+          <property key="resizable" type="bool">false</property>
+          <property key="width" type="double">5</property>
+          <property key="height" type="double">5</property>
+          <property key="state" type="string">floating</property>
+          <property key="showTitleBar" type="bool">false</property>
+        </ignition-gui>
+      </plugin>
+      <plugin filename="WorldControl" name="World control">
+        <ignition-gui>
+          <title>World control</title>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="bool" key="resizable">false</property>
+          <property type="double" key="height">72</property>
+          <property type="double" key="width">121</property>
+          <property type="double" key="z">1</property>
+          <property type="string" key="state">floating</property>
+          <anchors target="3D View">
+            <line own="left" target="left" />
+            <line own="bottom" target="bottom" />
+          </anchors>
+        </ignition-gui>
+        <play_pause>true</play_pause>
+        <step>true</step>
+        <start_paused>false</start_paused>
+        <use_event>true</use_event>
+      </plugin>
+      <plugin filename="CameraFps" name="Camera FPS">
+        <ignition-gui><property type="string" key="state">floating</property>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="double" key="width">115</property>
+          <property type="double" key="height">45</property>
+          <anchors target="3D View"><line own="top" target="top"/><line own="left" target="left"/></anchors>
+        </ignition-gui>
+      </plugin>
+      <plugin filename="Tron2FrameSync" name="Tron2FrameSync">
+        <ignition-gui>
+          <property type="string" key="state">floating</property>
+          <property type="double" key="width">1</property>
+          <property type="double" key="height">1</property>
+          <property type="bool" key="showTitleBar">false</property>
+        </ignition-gui>
+      </plugin>
+    </gui>
+    <gravity>0 0 -9.80665</gravity>
+    <physics name="classroom_physics" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+    </physics>
+    <plugin filename="ignition-gazebo-physics-system" name="ignition::gazebo::systems::Physics"/>
+    <plugin filename="ignition-gazebo-user-commands-system" name="ignition::gazebo::systems::UserCommands"/>
+    <plugin filename="ignition-gazebo-scene-broadcaster-system" name="ignition::gazebo::systems::SceneBroadcaster">
+      <state_hertz>25</state_hertz>
+    </plugin>
+    <scene><ambient>0.55 0.55 0.55 1</ambient><background>0.75 0.80 0.85 1</background></scene>
+    <light name="sun" type="directional">
+      <pose>0 0 5 0 0 0</pose><direction>-0.5 0.1 -1</direction>
+      <diffuse>0.85 0.85 0.85 1</diffuse><specular>0.2 0.2 0.2 1</specular>
+    </light>
+    <model name="floor">
+      <static>true</static>
+      <link name="ground">
+        <collision name="surface"><geometry><plane><normal>0 0 1</normal><size>20 20</size></plane></geometry></collision>
+        <visual name="surface"><geometry><plane><normal>0 0 1</normal><size>20 20</size></plane></geometry>
+          <material><ambient>0.52 0.54 0.56 1</ambient><diffuse>0.65 0.66 0.67 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+  </world>
+</sdf>

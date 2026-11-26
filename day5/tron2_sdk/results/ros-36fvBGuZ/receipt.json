@@ -1,0 +1,30 @@
+{
+  "robot": "tron2",
+  "joint_order": [
+    "proximal_pitch_L_Joint",
+    "proximal_roll_L_Joint",
+    "proximal_yaw_L_Joint",
+    "knee_L_Joint",
+    "wheel_L_Joint",
+    "proximal_pitch_R_Joint",
+    "proximal_roll_R_Joint",
+    "proximal_yaw_R_Joint",
+    "knee_R_Joint",
+    "wheel_R_Joint"
+  ],
+  "topics": {
+    "/tron2/joint_states": {
+      "live": 60,
+      "bag": 60,
+      "first_stamp_ns": 384919241339,
+      "last_stamp_ns": 386164246079
+    },
+    "/tron2/imu": {
+      "live": 60,
+      "bag": 60,
+      "first_stamp_ns": 384919337897,
+      "last_stamp_ns": 386164362401
+    }
+  },
+  "status": "PASS"
+}

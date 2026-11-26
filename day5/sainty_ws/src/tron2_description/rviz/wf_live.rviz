@@ -1,0 +1,33 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+Visualization Manager:
+  Global Options:
+    Fixed Frame: world
+    Background Color: 55; 62; 72
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Grid
+      Enabled: true
+      Cell Size: 0.15
+      Plane Cell Count: 14
+      Offset: {X: 0, Y: 0, Z: 0}
+    - Class: rviz_default_plugins/RobotModel
+      Name: TRON2 WF
+      Enabled: true
+      TF Prefix: tron2
+      Description Source: Topic
+      Description Topic:
+        Value: /tron2/robot_description
+        Reliability Policy: Reliable
+        Durability Policy: Transient Local
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 2.25
+      Pitch: 0.24
+      Yaw: 0.78
+      Focal Point: {X: 0, Y: 0, Z: 0.32}

@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "scope": "model loading, finite integration, ONNX contract, educational CPU rollout; not training convergence or official ROS deployment",
+  "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+  "platform": "Linux-6.18.58.1-microsoft-standard-WSL2-x86_64-with-glibc2.35",
+  "mujoco": "3.2.2",
+  "numpy": "1.26.4",
+  "onnxruntime": "1.19.2",
+  "model": {
+    "nq": 30,
+    "nv": 29,
+    "nu": 23,
+    "nbody": 26,
+    "nmesh": 25,
+    "physics_dt": 0.002
+  },
+  "policy": {
+    "input_name": "obs",
+    "input_shape": [
+      1,
+      390
+    ],
+    "output_name": "actions",
+    "output_shape": [
+      1,
+      23
+    ],
+    "observation_dimension": 390,
+    "action_dimension": 23,
+    "control_dt": 0.02,
+    "decimation": 10,
+    "invalid_dimension_rejected": true
+  },
+  "rollout": {
+    "steps": 300,
+    "seconds": 5.999999999999561,
+    "min_base_height": 0.7746947115975595,
+    "final_base_height": 0.7866223438783773,
+    "displacement_x": 0.2062197886300769,
+    "all_finite": true,
+    "upright_height_above_0_55_all_steps": true
+  },
+  "source_commit": "937c67d66db1015a73a359f2c742943810a74e3a"
+}

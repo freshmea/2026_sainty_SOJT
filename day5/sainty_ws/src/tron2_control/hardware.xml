@@ -1,0 +1,5 @@
+<library path="tron2_control_plugins">
+  <class name="tron2_control/WheelFootSystem" type="tron2_control::WheelFootSystem" base_class_type="hardware_interface::SystemInterface">
+    <description>WF state and command transport for the existing LimX SDK bridge or the selected simulator.</description>
+  </class>
+</library>

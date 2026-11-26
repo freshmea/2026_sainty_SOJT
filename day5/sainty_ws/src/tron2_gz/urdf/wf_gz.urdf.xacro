@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<robot name="tron2" xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:include filename="$(find tron2_description)/urdf/wf_tron2a.urdf"/>
+  <gazebo>
+    <plugin filename="libtron2_gz_control.so" name="tron2_gz::WheelFootSystem"/>
+  </gazebo>
+</robot>

@@ -316,7 +316,7 @@ C가 받은 position은 파일에 기록되었던 샘플이다. 이때 발행 �
 
 ### 다음 실습과 연결
 
-~/sainty/day1/ros_lab/run.sh k1은 K1 시뮬레이터에서 온 관절 상태와 IMU를, run.sh tron2는 루프백 SDK의 상태를 관찰한다. 이번 예제의 /classroom/joint_states와 같은 JointState 타입이라도 관절 수·발행자·시간 출처가 바뀐다. 기존 K1에서 name과 position의 길이, header.stamp의 출처를 먼저 찾아본다.
+~/sainty/day5/ros_lab/run.sh k1은 K1 시뮬레이터에서 온 관절 상태와 IMU를, run.sh tron2는 루프백 SDK의 상태를 관찰한다. 이번 예제의 /classroom/joint_states와 같은 JointState 타입이라도 관절 수·발행자·시간 출처가 바뀐다. 기존 K1에서 name과 position의 길이, header.stamp의 출처를 먼저 찾아본다.
 
 **수료 확인**  (1) 실행 명령 하나를 재현한다. (2) 예상과 실제 값을 단위와 함께 두 쌍 적는다. (3) 메시지가 안 올 때 이름·타입·QoS를 어떤 순서로 볼지 근거를 붙여 설명한다.
 

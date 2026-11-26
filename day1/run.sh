@@ -9,5 +9,5 @@ mkdir -p results
 (cd K1 && uv run --locked verify_policy.py --no-render)
 if [[ ! -e results/k1_validation.json ]]; then ln -s ../K1/validation/validation.json results/k1_validation.json; fi
 
-./ros_lab/run.sh k1
-./ros_lab/run.sh tron2
+../day5/ros_lab/run.sh k1
+../day5/ros_lab/run.sh tron2

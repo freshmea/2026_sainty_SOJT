@@ -1,0 +1,9 @@
+stdin is not a terminal device. Keyboard handling disabled.[INFO] [1795706710.035873914] [rosbag2_storage]: Opened database '/home/aa/sainty/day5/tron2_sdk/results/ros-36fvBGuZ/telemetry/telemetry_0.db3' for READ_ONLY.
+[INFO] [1795706710.035973203] [rosbag2_player]: Set rate to 1
+[INFO] [1795706710.059298229] [rosbag2_player]: Adding keyboard callbacks.
+[INFO] [1795706710.059390016] [rosbag2_player]: Press SPACE for Pause/Resume
+[INFO] [1795706710.059406074] [rosbag2_player]: Press CURSOR_RIGHT for Play Next Message
+[INFO] [1795706710.059418806] [rosbag2_player]: Press CURSOR_UP for Increase Rate 10%
+[INFO] [1795706710.059430476] [rosbag2_player]: Press CURSOR_DOWN for Decrease Rate 10%
+[INFO] [1795706710.059742358] [rosbag2_player]: Sleep 3000000000 ns
+[INFO] [1795706713.060583848] [rosbag2_storage]: Opened database '/home/aa/sainty/day5/tron2_sdk/results/ros-36fvBGuZ/telemetry/telemetry_0.db3' for READ_ONLY.
