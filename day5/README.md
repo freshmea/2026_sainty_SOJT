@@ -182,6 +182,10 @@ ros2 launch tron2_bringup policy_drive.launch.py profile:=experiment start_pose:
   drive_onnx:="$R/wf_high_speed_s73/policy.onnx" recovery_onnx:="$R/wf_recovery_s73/policy.onnx"
 ```
 
+제조사 WF 주행 정책과 수업용 복구 정책을 함께 실행하면 두 정책은 기본적으로 제조사 `encoder.onnx`를 공유한다. 인코더가 최근 10프레임의 관측으로 추정한 속도 3개가 정책 입력의 첫 세 값이다. 이 페이지의 42입력 복구 모델에는 낙상 방향과 복구 단계도 전달된다. 시작 로그의 `DRIVE`와 `RECOVERY`에서 실제 인코더·정책 경로를 확인한다. 다른 Isaac 학습 결과를 쓰면 함께 내보낸 인코더를 `drive_encoder` 또는 `recovery_encoder`로 지정한다.
+
+주행 launch에 `recovery_onnx`를 지정하면 넘어질 때마다 속도 지령을 0으로 두고 현재 위치에서 일어나기를 시도한다. 한 번 실패하면 관절로 다리를 다시 접어 자세를 바꾼 뒤 재시도한다. 몸체의 높이와 직립도를 2초 연속 유지하면 조이스틱 주행을 재개한다. 학습·평가의 성공률은 이전과 같이 시도 1회 기준으로 계산한다.
+
 [낙상 복구 실습](../pdf/TRON2_WF_낙상복구_PPO_상세교안.pdf)과 [고속 주행 실습](../pdf/TRON2_WF_고속주행_PPO_상세교안.pdf)에 전체 데이터 흐름, 같은 초기 상태에서의 대조군, 성공·실패 판정과 재평가 명령이 있다. 개별 96회 결과는 [시험 CSV](../pdf/tron2_figures/wf_training_trials.csv)에 있다.
 
 LimX의 공식 평지 WF 과제는 [제조사 README](tron2_sdk/vendor/tron2_rl_lab/README.md)에 따라 Isaac Lab과 저장소에 포함된 rsl_rl을 사용한다. WSL 내부에 준비한 isaac_wsl/run-python을 통해 다음처럼 원본 trainer를 launch할 수 있다. num_envs와 iterations는 먼저 경로를 점검하기 위한 값이다.

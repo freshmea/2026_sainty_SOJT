@@ -97,23 +97,21 @@ class PolicyDrive(Node):
     def drive(self, env, actor, viewer, obs, rescue, balance, recovery):
         period = env.substeps * env.model.opt.timestep
         deadline = time.monotonic()
-        settling = 0
+        preparation = None
+        attempt = 1
+        if rescue is not None:
+            from wf_task_runtime import Recovery, RecoveryPreparation
         self.get_logger().info(f'WF inference ready at {1/period:.0f} Hz.')
         while rclpy.ok() and (viewer is None or viewer.is_running()):
             rclpy.spin_once(self, timeout_sec=0)
             if not rclpy.ok():
                 break
-            if settling:
-                # Continue the actual fall with zero torque. Keep the same world pose and clock.
-                env.data.ctrl[:] = 0
-                mujoco.mj_step(env.model, env.data, nstep=env.substeps)
-                mujoco.mj_forward(env.model, env.data)
-                env.last.fill(0)
-                settling -= 1
-                obs = env.observe(first=not settling)
-                if not settling:
-                    from wf_task_runtime import Recovery
+            if preparation is not None:
+                obs, ready = preparation.step(env)
+                if ready:
+                    preparation = None
                     recovery = Recovery(obs)
+                    self.get_logger().info(f'Recovery attempt {attempt} started.')
             else:
                 vx, wz = self.command if time.monotonic()-self.last_command < .25 else (0., 0.)
                 if recovery is not None:
@@ -128,17 +126,23 @@ class PolicyDrive(Node):
                 if recovery is not None:
                     result = recovery.update(env, fallen)
                     if result == 'failed':
-                        self.publish_feedback(env)
-                        raise RuntimeError('Recovery trial ended without sustained standing.')
-                    if result == 'recovered':
+                        self.get_logger().warning(
+                            f'Recovery attempt {attempt} failed. Repositioning for another attempt.')
+                        recovery = None
+                        attempt += 1
+                        preparation = RecoveryPreparation(env, retry=True)
+                    elif result == 'recovered':
                         self.get_logger().info('Recovered: two seconds upright. Drive control resumed.')
+                        self.command = (0., 0.)
+                        self.last_command = -math.inf
                         recovery = None
                 elif fallen:
                     if rescue is None:
                         self.publish_feedback(env)
                         raise RuntimeError('WF fell; the rollout ended. Relaunch to start upright.')
                     env.speed = 0.
-                    settling = round(1/period)
+                    attempt = 1
+                    preparation = RecoveryPreparation(env, retry=False)
                     self.get_logger().info('Fall detected. Settling before recovery.')
             self.publish_feedback(env)
             if viewer is not None:
@@ -155,19 +159,33 @@ def main():
         if lease is not None:
             stack.enter_context(lease)
         sys.path.insert(0, str(Path(os.environ['TRON2_SDK_ROOT']).resolve()))
-        from train_tron2_wf import WheelDrive, session
+        from train_tron2_wf import WEIGHTS, WheelDrive, session
         from view_tron2_wf import wf_viewer
         env = stack.enter_context(WheelDrive())
-        balance = WFActor(session('policy.onnx'))
+        vendor_encoder = (WEIGHTS / 'encoder.onnx').resolve()
+        vendor_policy = (WEIGHTS / 'policy.onnx').resolve()
+        sessions = {vendor_encoder: env.encoder}
 
-        def load_actor(role):
-            model = os.getenv(role + '_ONNX')
-            if not model:
+        def get_session(path):
+            if path not in sessions:
+                sessions[path] = session(path)
+            return sessions[path]
+
+        balance = WFActor(get_session(vendor_policy))
+        model_paths = {}
+
+        def load_actor(role, default=None):
+            raw = os.getenv(role + '_ONNX') or default
+            if not raw:
                 return None
-            encoder = os.getenv(role + '_ENCODER')
-            return WFActor(session(model), session(encoder) if encoder else None, role == 'RECOVERY')
+            model = Path(raw).resolve()
+            encoder = Path(os.getenv(role + '_ENCODER') or vendor_encoder).resolve()
+            model_paths[role] = (model, encoder)
+            # WheelDrive.observe() already filled obs[:3] with this encoder's result.
+            override = None if encoder == vendor_encoder else get_session(encoder)
+            return WFActor(get_session(model), override, recovery=(role == 'RECOVERY'))
 
-        actor = load_actor('DRIVE') or balance
+        actor = load_actor('DRIVE', vendor_policy)
         rescue = load_actor('RECOVERY')
         recovery = None
         if rescue is not None:
@@ -183,6 +201,8 @@ def main():
         node = PolicyDrive(env)
         stack.callback(node.destroy_node)
         stack.callback(node.camera.close)
+        for role, (model_path, encoder_path) in model_paths.items():
+            node.get_logger().info(f'{role}: encoder={encoder_path} -> actor={model_path}')
         viewer = stack.enter_context(wf_viewer(env, node.viewer))
         node.drive(env, actor, viewer, obs, rescue, balance, recovery)
 
