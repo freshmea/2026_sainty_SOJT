@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<robot name="lesson_leg">
+  <link name="thigh"/>
+  <link name="shin"/>
+  <link name="foot"/>
+  <joint name="knee_joint" type="revolute">
+    <parent link="thigh"/><child link="shin"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-1" upper="1" effort="1" velocity="1"/>
+  </joint>
+  <joint name="foot_mount" type="fixed">
+    <parent link="shin"/><child link="foot"/>
+    <origin xyz="0 0 -0.30"/>
+  </joint>
+</robot>
