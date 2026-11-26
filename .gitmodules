@@ -1,8 +1,8 @@
 [submodule "day1/tron2_sdk/vendor/tron2_rl_deploy_python"]
-	path = day1/tron2_sdk/vendor/tron2_rl_deploy_python
+	path = day5/tron2_sdk/vendor/tron2_rl_deploy_python
 	url = https://github.com/limxdynamics/tron2_rl_deploy_python.git
 [submodule "day1/tron2_sdk/vendor/tron2_rl_lab"]
-	path = day1/tron2_sdk/vendor/tron2_rl_lab
+	path = day5/tron2_sdk/vendor/tron2_rl_lab
 	url = https://github.com/limxdynamics/tron2_rl_lab.git
 [submodule "day4/microduck_rl_training"]
 	path = day4/microduck_rl_training
