@@ -27,6 +27,7 @@ setup(
             # "명령어=패키지이름.파일이름:함수이름"
             "simple_pub = sainty_basic.simple_pub:main",
             "simple_class_pub = sainty_basic.simple_class_pub:main",
+            "move_turtle = sainty_basic.move_turtle:main",
         ],
     },
 )
