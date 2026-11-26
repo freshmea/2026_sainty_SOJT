@@ -25,7 +25,8 @@ setup(
     entry_points={
         'console_scripts': [
             # "명령어=패키지이름.파일이름:함수이름"
-            "simple_pub = sainty_basic.simple_pub:main"
+            "simple_pub = sainty_basic.simple_pub:main",
+            "simple_class_pub = sainty_basic.simple_class_pub:main",
         ],
     },
 )
