@@ -42,6 +42,8 @@ source sainty_ws/install/setup.bash
 ros2 launch tron2_bringup policy_drive.launch.py
 ```
 
+기본 주행 launch는 패키지에 저장한 WF 설정으로 RViz를 함께 연다. 시뮬레이션을 켜 둔 채 RViz 창만 다시 열 때는 `ros2 launch tron2_description live_rviz.launch.py`를 사용한다. 두 실행 경로는 동일한 `wf_live.rviz`에서 고정 프레임 `world`, RobotModel TF Prefix `tron2`, 추적 프레임 `tron2/base_Link`를 읽는다.
+
 `profile:=reference`는 제조사 WF 예제의 속도 범위를 읽는다. `profile:=experiment`는 시뮬레이션에서 전후 ±5 m/s, 회전 ±4 rad/s까지 명령한다. 시험 범위는 `max_linear:=2.0 max_yaw:=1.5`처럼 바꿀 수 있다. RViz2는 `rviz:=true`로 추가한다. [정책 주행 실습 PDF](../pdf/TRON2_WF_정책주행_조이스틱_실습.pdf) · [속도·낙상 시험 46건](../pdf/tron2_figures/wf_policy_sweep.csv)
 
 ### 터미널 A — 시뮬레이션 브링업

@@ -6,8 +6,9 @@ import yaml
 
 from ament_index_python.packages import get_package_share_path
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, ExecuteProcess, OpaqueFunction, Shutdown
+from launch.actions import DeclareLaunchArgument, ExecuteProcess, IncludeLaunchDescription, OpaqueFunction, Shutdown
 from launch.conditions import IfCondition
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
@@ -52,7 +53,7 @@ def start(context):
         raise ValueError('A fallen start requires recovery_onnx')
     reserve_launch(context, 'mujoco')
     viewer = LaunchConfiguration('viewer').perform(context)
-    rviz = get_package_share_path('tron2_description') / 'rviz/wf_live.rviz'
+    live_rviz = get_package_share_path('tron2_description') / 'launch/live_rviz.launch.py'
     return [
         camera_window(),
         robot_state_publisher(),
@@ -65,8 +66,8 @@ def start(context):
         Node(package='tron2_dashboard', executable='velocity_joystick', namespace='tron2',
              condition=IfCondition(LaunchConfiguration('joystick')), parameters=[limits], output='screen',
              on_exit=Shutdown(reason='Joystick closed')),
-        Node(package='rviz2', executable='rviz2', namespace='tron2', arguments=['-d', str(rviz)],
-             condition=IfCondition(LaunchConfiguration('rviz'))),
+        IncludeLaunchDescription(PythonLaunchDescriptionSource(str(live_rviz)),
+                                 condition=IfCondition(LaunchConfiguration('rviz'))),
     ]
 
 
@@ -84,7 +85,8 @@ def generate_launch_description():
         DeclareLaunchArgument('start_pose', default_value='standing', choices=['standing','front','back']),
         DeclareLaunchArgument('viewer', default_value='true', choices=['true', 'false']),
         DeclareLaunchArgument('joystick', default_value='true', choices=['true', 'false']),
-        DeclareLaunchArgument('rviz', default_value='false', choices=['true', 'false']),
+        DeclareLaunchArgument('rviz', default_value=LaunchConfiguration('viewer'), choices=['true', 'false'],
+                              description='Open RViz with the WF model and TF. Defaults to the viewer setting.'),
         DeclareLaunchArgument('camera_view', default_value=LaunchConfiguration('viewer'), choices=['true', 'false']),
         OpaqueFunction(function=start),
     ])

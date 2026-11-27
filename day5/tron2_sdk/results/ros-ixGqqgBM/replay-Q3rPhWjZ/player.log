@@ -1,0 +1,9 @@
+[INFO] [1795741591.967033327] [rosbag2_storage]: Opened database '/home/aa/sainty/day5/tron2_sdk/results/ros-ixGqqgBM/telemetry/telemetry_0.db3' for READ_ONLY.
+[INFO] [1795741591.967122196] [rosbag2_player]: Set rate to 1
+[INFO] [1795741591.975353187] [rosbag2_player]: Adding keyboard callbacks.
+[INFO] [1795741591.975402177] [rosbag2_player]: Press SPACE for Pause/Resume
+[INFO] [1795741591.975423132] [rosbag2_player]: Press CURSOR_RIGHT for Play Next Message
+[INFO] [1795741591.975445920] [rosbag2_player]: Press CURSOR_UP for Increase Rate 10%
+[INFO] [1795741591.975459060] [rosbag2_player]: Press CURSOR_DOWN for Decrease Rate 10%
+[INFO] [1795741591.975619735] [rosbag2_player]: Sleep 3000000000 ns
+[INFO] [1795741594.976346783] [rosbag2_storage]: Opened database '/home/aa/sainty/day5/tron2_sdk/results/ros-ixGqqgBM/telemetry/telemetry_0.db3' for READ_ONLY.
