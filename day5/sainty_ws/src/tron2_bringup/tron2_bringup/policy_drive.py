@@ -137,13 +137,16 @@ class PolicyDrive(Node):
                         self.last_command = -math.inf
                         recovery = None
                 elif fallen:
+                    self.command = (0., 0.)
+                    self.last_command = -math.inf
                     if rescue is None:
-                        self.publish_feedback(env)
-                        raise RuntimeError('WF fell; the rollout ended. Relaunch to start upright.')
-                    env.speed = 0.
-                    attempt = 1
-                    preparation = RecoveryPreparation(env, retry=False)
-                    self.get_logger().info('Fall detected. Settling before recovery.')
+                        self.get_logger().warning('Fall detected. No recovery policy loaded. Resetting simulation upright.')
+                        obs, _ = env.reset(options={'speed': 0.})
+                    else:
+                        env.speed = 0.
+                        attempt = 1
+                        preparation = RecoveryPreparation(env, retry=False)
+                        self.get_logger().info('Fall detected. Settling before recovery.')
             self.publish_feedback(env)
             if viewer is not None:
                 viewer.sync()

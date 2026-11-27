@@ -42,6 +42,11 @@ def start(context):
     models = {}
     for name in ('drive_onnx', 'recovery_onnx', 'drive_encoder', 'recovery_encoder'):
         raw = LaunchConfiguration(name).perform(context)
+        if name == 'recovery_onnx' and raw == 'auto':
+            classroom_model = root.parent / 'locomotion/results/wf_recovery_s73/policy.onnx'
+            raw = str(classroom_model) if experiment and classroom_model.is_file() else ''
+        elif name == 'recovery_onnx' and raw == 'none':
+            raw = ''
         if raw and not Path(raw).expanduser().is_file():
             raise ValueError(f'{name} does not exist: {raw}')
         models[name.upper()] = str(Path(raw).expanduser().resolve()) if raw else ''
@@ -79,7 +84,9 @@ def generate_launch_description():
         DeclareLaunchArgument('max_linear', default_value='', description='Experiment stick range in m/s.'),
         DeclareLaunchArgument('max_yaw', default_value='', description='Experiment stick range in rad/s.'),
         DeclareLaunchArgument('drive_onnx', default_value='', description='Optional 40-input WF drive actor.'),
-        DeclareLaunchArgument('recovery_onnx', default_value='', description='A classroom 42-input rescue or a continuous 40-input Isaac recovery actor.'),
+        DeclareLaunchArgument('recovery_onnx', default_value='auto',
+                              description='Auto selects the local classroom recovery policy in experiment mode when available. '
+                                          'Use none to reset upright on falls. An explicit path selects a recovery actor.'),
         DeclareLaunchArgument('drive_encoder', default_value='', description='Drive history encoder. Empty uses the released WF encoder.onnx.'),
         DeclareLaunchArgument('recovery_encoder', default_value='', description='Recovery history encoder. Empty uses the released WF encoder.onnx.'),
         DeclareLaunchArgument('start_pose', default_value='standing', choices=['standing','front','back']),
